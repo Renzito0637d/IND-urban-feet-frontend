@@ -1,8 +1,9 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export const apiPrefixInterceptor: HttpInterceptorFn = (req, next) => {
 
-  const apiUrl = 'http://localhost:8080/api';
+  const apiUrl = environment.apiUrl;
 
   console.log('Interceptando solicitud:', req.url);
 
