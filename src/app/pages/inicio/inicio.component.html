@@ -1,0 +1,223 @@
+<div data-aos="fade-up" id="carousel" class="relative max-w-7xl mx-auto px-6 my-5">
+    <!-- track -->
+    <div id="carouselTrack" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar rounded-xl"
+        aria-live="polite">
+        <div class="w-full flex-shrink-0 snap-center">
+            <img src="/img/publi1.webp" alt="Slide 1"
+                class="block w-full h-[320px] md:h-[440px] lg:h-[520px] object-cover rounded-xl">
+        </div>
+        <div class="w-full flex-shrink-0 snap-center">
+            <img src="/img/publi2.webp" alt="Slide 2"
+                class="block w-full h-[320px] md:h-[440px] lg:h-[520px] object-cover rounded-xl">
+        </div>
+        <div class="w-full flex-shrink-0 snap-center">
+            <img src="/img/publi3.webp" alt="Slide 3"
+                class="block w-full h-[320px] md:h-[440px] lg:h-[520px] object-cover rounded-xl">
+        </div>
+    </div>
+
+    <!-- Prev/Next -->
+    <button type="button" aria-label="Anterior"
+        class="absolute left-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center size-10 rounded-full bg-black/50 hover:bg-black/70 text-white transition focus:outline-none focus:ring-2 focus:ring-white/60"
+        onclick="document.getElementById('carouselTrack').scrollBy({left: -window.innerWidth, behavior: 'smooth'})">
+        <!-- icono chevron-left -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+            <path fill-rule="evenodd"
+                d="M15.78 4.22a.75.75 0 010 1.06L9.06 12l6.72 6.72a.75.75 0 11-1.06 1.06l-7.25-7.25a.75.75 0 010-1.06l7.25-7.25a.75.75 0 011.06 0z"
+                clip-rule="evenodd" />
+        </svg>
+    </button>
+    <button type="button" aria-label="Siguiente"
+        class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center size-10 rounded-full bg-black/50 hover:bg-black/70 text-white transition focus:outline-none focus:ring-2 focus:ring-white/60"
+        onclick="document.getElementById('carouselTrack').scrollBy({left: window.innerWidth, behavior: 'smooth'})">
+        <!-- icono chevron-right -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+            <path fill-rule="evenodd"
+                d="M8.22 19.78a.75.75 0 010-1.06L14.94 12 8.22 5.28a.75.75 0 011.06-1.06l7.25 7.25a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0z"
+                clip-rule="evenodd" />
+        </svg>
+    </button>
+</div>
+
+<!-- PUBLICIDAD -->
+<div data-aos="fade-up" class="mt-8 max-w-7xl mx-auto px-6">
+    <img src="/img/Iniciophoto.webp" alt="Publicidad" class="w-full rounded-xl object-cover">
+</div>
+
+<!-- MARCAS -->
+<section class="mt-12 max-w-7xl mx-auto px-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-center text-black dark:text-white" data-aos="fade-up">Marcas que te
+        ofrecemos</h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <!-- Card marcas -->
+        <div class="aspect-[1/1] flex items-center justify-center p-4 hover:-translate-y-2">
+            <img src="/img/nike.webp" alt="Nike" class="object-contain rounded-xl">
+        </div>
+        <div class="aspect-[1/1] flex items-center justify-center p-4 hover:-translate-y-2">
+            <img src="/img/adidas.webp" alt="Nike" class="object-contain rounded-xl">
+        </div>
+        <div class="aspect-[1/1] flex items-center justify-center p-4 hover:-translate-y-2">
+            <img src="/img/atletix.webp" alt="Nike" class="object-contain rounded-xl">
+        </div>
+        <div class="aspect-[1/1] flex items-center justify-center p-4 hover:-translate-y-2">
+            <img src="/img/newAtletic.webp" alt="Nike" class="object-contain rounded-xl">
+        </div>
+        <div class="aspect-[1/1] flex items-center justify-center p-4 hover:-translate-y-2">
+            <img src="/img/i-run.webp" alt="Nike" class="object-contain rounded-xl">
+        </div>
+        <div class="aspect-[1/1] flex items-center justify-center p-4 hover:-translate-y-2">
+            <img src="/img/punto.webp" alt="Nike" class="object-contain rounded-xl">
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORÍAS DESTACADAS -->
+<section class="mt-12 max-w-7xl mx-auto px-6">
+    <h2 data-aos="fade-up" class="text-2xl md:text-3xl font-bold text-center text-black dark:text-white">Categorías
+        Destacadas</h2>
+
+    <div data-aos="fade-up" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
+
+        <div class="relative overflow-hidden w-60 h-96 rounded-3xl text-2xl font-bold bg-sky-400">
+            <div class="z-10 absolute w-full h-full peer"></div>
+            <div
+                class="absolute peer-hover:-top-20 peer-hover:-left-16 peer-hover:w-[140%] peer-hover:h-[140%] -top-32 -left-16 w-32 h-44 rounded-full bg-cyan-400 transition-all duration-500">
+            </div>
+            <div
+                class="absolute flex flex-col text-xl text-center items-end justify-end peer-hover:right-0 peer-hover:rounded-b-none peer-hover:bottom-0 peer-hover:items-center peer-hover:justify-center peer-hover:w-full peer-hover:h-full -bottom-32 -right-16 w-36 h-44 rounded-full bg-cyan-400 transition-all duration-500">
+                <button
+                    class="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg
+                             border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
+                    Ver productos
+                </button>
+
+            </div>
+            <div class="w-full h-full items-center justify-center ">
+                <img src="/img/FUTBOL.webp" alt="Imagen hover" class="" />
+            </div>
+        </div>
+
+        <div class="relative overflow-hidden w-60 h-96 rounded-3xl text-2xl font-bold bg-sky-400">
+            <div class="z-10 absolute w-full h-full peer"></div>
+            <div
+                class="absolute peer-hover:-top-20 peer-hover:-left-16 peer-hover:w-[140%] peer-hover:h-[140%] -top-32 -left-16 w-32 h-44 rounded-full bg-cyan-400 transition-all duration-500">
+            </div>
+            <div
+                class="absolute flex flex-col text-xl text-center items-end justify-end peer-hover:right-0 peer-hover:rounded-b-none peer-hover:bottom-0 peer-hover:items-center peer-hover:justify-center peer-hover:w-full peer-hover:h-full -bottom-32 -right-16 w-36 h-44 rounded-full bg-cyan-400 transition-all duration-500">
+                <button
+                    class="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg
+                             border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
+                    Ver productos
+                </button>
+
+            </div>
+            <div class="w-full h-full items-center justify-center ">
+                <img src="/img/TRAINING.webp" alt="Imagen hover" class="" />
+            </div>
+        </div>
+
+        <div class="relative overflow-hidden w-60 h-96 rounded-3xl text-2xl font-bold bg-sky-400">
+            <div class="z-10 absolute w-full h-full peer"></div>
+            <div
+                class="absolute peer-hover:-top-20 peer-hover:-left-16 peer-hover:w-[140%] peer-hover:h-[140%] -top-32 -left-16 w-32 h-44 rounded-full bg-cyan-400 transition-all duration-500">
+            </div>
+            <div
+                class="absolute flex flex-col text-xl text-center items-end justify-end peer-hover:right-0 peer-hover:rounded-b-none peer-hover:bottom-0 peer-hover:items-center peer-hover:justify-center peer-hover:w-full peer-hover:h-full -bottom-32 -right-16 w-36 h-44 rounded-full bg-cyan-400 transition-all duration-500">
+                <button
+                    class="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg
+                             border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
+                    Ver productos
+                </button>
+
+            </div>
+            <div class="w-full h-full items-center justify-center ">
+                <img src="/img/OUTDOOR.webp" alt="Imagen hover" class="" />
+            </div>
+        </div>
+
+        <div class="relative overflow-hidden w-60 h-96 rounded-3xl text-2xl font-bold bg-sky-400">
+            <div class="z-10 absolute w-full h-full peer"></div>
+            <div
+                class="absolute peer-hover:-top-20 peer-hover:-left-16 peer-hover:w-[140%] peer-hover:h-[140%] -top-32 -left-16 w-32 h-44 rounded-full bg-cyan-400 transition-all duration-500">
+            </div>
+            <div
+                class="absolute flex flex-col text-xl text-center items-end justify-end peer-hover:right-0 peer-hover:rounded-b-none peer-hover:bottom-0 peer-hover:items-center peer-hover:justify-center peer-hover:w-full peer-hover:h-full -bottom-32 -right-16 w-36 h-44 rounded-full bg-cyan-400 transition-all duration-500">
+                <button
+                    class="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg
+                             border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
+                    Ver productos
+                </button>
+
+            </div>
+            <div class="w-full h-full items-center justify-center ">
+                <img src="/img/RUNNING.webp" alt="Imagen hover" class="" />
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- NOVEDADES Y DESTACADOS -->
+<section class="max-w-7xl mx-auto px-6 mb-10 pt-5 md:pt-8">
+    <h2 data-aos="fade-up" class="text-2xl md:text-3xl font-bold text-center text-black dark:text-white">
+        Novedades y destacados
+    </h2>
+
+    <div *ngIf="loading" class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div *ngFor="let i of [1,2,3]" class="h-72 rounded-2xl bg-neutral-200 dark:bg-neutral-800 animate-pulse"></div>
+    </div>
+
+    <div *ngIf="!loading" data-aos="fade-up" class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div *ngFor="let zap of topZapatillas"
+            class="relative group duration-500 cursor-pointer overflow-hidden text-gray-50 h-72 rounded-2xl hover:duration-700">
+            
+            <div class="h-72 bg-white dark:bg-neutral-900 relative rounded-2xl overflow-hidden">
+                
+                <div class="flex flex-row justify-between text-black dark:text-white z-10 relative">
+                    <svg class="fill-current stroke-current w-8 h-8 p-2 hover:bg-cyan-300 rounded-full m-1 transition-colors"
+                        height="100" viewBox="0 0 100 100" width="100"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.8,32.9V15.8m0,0H32.9m-17.1,0L37.2,37.2m47-4.3V15.8m0,0H67.1m17.1,0L62.8,37.2m-47,29.9V84.2m0,0H32.9m-17.1,0L37.2,62.8m47,21.4L62.8,62.8M84.2,84.2V67.1m0,17.1H67.1"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+                        </path>
+                    </svg>
+                    <svg class="fill-current stroke-current w-8 h-8 p-2 m-1 hover:bg-cyan-300 rounded-full transition-colors" height="100"
+                        viewBox="0 0 100 100" width="100"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50,17.4h0M50,50h0m0,32.6h0M50,22a4.7,4.7,0,1,1,4.7-4.6A4.7,4.7,0,0,1,50,22Zm0,32.7A4.7,4.7,0,1,1,54.7,50,4.7,4.7,0,0,1,50,54.7Zm0,32.6a4.7,4.7,0,1,1,4.7-4.7A4.7,4.7,0,0,1,50,87.3Z"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+                        </path>
+                    </svg>
+                </div>
+
+                <div class="absolute inset-0 flex items-center justify-center p-4 pb-12">
+                    <img [src]="zap.imgUrl" [alt]="zap.nombre" class="max-h-52 w-auto object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500">
+                </div>
+
+            </div>
+
+            <div class="absolute bg-white dark:bg-neutral-900 md:-bottom-10 sm:-bottom-10 xl:-bottom-10 left-0 right-0 p-4 flex flex-col gap-1 group-hover:bottom-0 transition-all duration-500 ease-out border-t border-neutral-100 dark:border-neutral-800">
+                
+                <span class="text-sky-400 dark:text-cyan-300 font-bold text-xs uppercase tracking-wider">
+                    {{ zap.marca }}
+                </span>
+                
+                <span class="text-gray-800 dark:text-neutral-200 font-bold text-xl md:text-2xl leading-tight line-clamp-1" [title]="zap.nombre">
+                    {{ zap.nombre }}
+                </span>
+                
+                <p class="text-neutral-500 dark:text-neutral-400 text-sm">
+                    Tendencia en {{ zap.tipo || 'calzado' }}
+                </p>
+            </div>
+
+        </div>
+
+        <div *ngIf="topZapatillas.length === 0" class="col-span-3 text-center py-10 text-neutral-500">
+            Pronto verás nuestras novedades aquí.
+        </div>
+
+    </div>
+</section>

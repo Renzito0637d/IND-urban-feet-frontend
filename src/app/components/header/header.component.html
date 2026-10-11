@@ -1,0 +1,203 @@
+<header
+  class="transition duration-300 ease-in-out sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-neutral-300/60 dark:supports-[backdrop-filter]:bg-neutral-900/40 border-b border-neutral-300/40 dark:border-neutral-800/60">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between h-16">
+
+      <div class="flex items-center gap-6">
+        <div class="shrink-0 flex items-center text-black dark:text-sky-100">
+          <a routerLink="/"><img src="/img/logo.webp" alt="UrbanFeet" class="h-14 w-auto" /></a>
+        </div>
+
+        <nav
+          class="hidden min-[835px]:flex items-center justify-self-center text-center gap-2 text-sky-900 dark:text-sky-100">
+          <a routerLink="/"
+            routerLinkActive="bg-sky-300/85 shadow-sm dark:bg-sky-900/100 dark:border-sky-700 text-sky-950 dark:text-sky-200"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="inline-flex items-center rounded-xl bg-sky-200 dark:bg-sky-900/50 border border-sky-300 dark:border-sky-600 px-3 py-1.5 text-sm font-medium hover:bg-cyan-200/95 hover:dark:bg-sky-900/60">
+            Inicio
+          </a>
+          <a routerLink="/catalogo"
+            routerLinkActive="bg-sky-300/85 shadow-sm dark:bg-sky-900/100 dark:border-sky-700 text-sky-950 dark:text-sky-200"
+            class="inline-flex items-center rounded-xl bg-sky-200 dark:bg-sky-900/50 border border-sky-300 dark:border-sky-600 px-3 py-1.5 text-sm font-medium hover:bg-cyan-200/95 hover:dark:bg-sky-900/60">
+            Catalogo
+          </a>
+          <a routerLink="/nosotros"
+            routerLinkActive="bg-sky-300/85 shadow-sm dark:bg-sky-900/100 dark:border-sky-700 text-sky-950 dark:text-sky-200"
+            class="inline-flex items-center rounded-xl bg-sky-200 dark:bg-sky-900/50 border border-sky-300 dark:border-sky-600 px-3 py-1.5 text-sm font-medium hover:bg-cyan-200/95 hover:dark:bg-sky-900/60">
+            Nosotros
+          </a>
+          <a routerLink="/contactanos"
+            routerLinkActive="bg-sky-300/85 shadow-sm dark:bg-sky-900/100 dark:border-sky-700 text-sky-950 dark:text-sky-200"
+            class="inline-flex items-center rounded-xl bg-sky-200 dark:bg-sky-900/50 border border-sky-300 dark:border-sky-600 px-3 py-1.5 text-sm font-medium hover:bg-cyan-200/95 hover:dark:bg-sky-900/60">
+            Contactanos
+          </a>
+          <a routerLink="/redes"
+            routerLinkActive="bg-sky-300/85 shadow-sm dark:bg-sky-900/100 dark:border-sky-700 text-sky-950 dark:text-sky-200"
+            class="inline-flex items-center rounded-xl bg-sky-200 dark:bg-sky-900/50 border border-sky-300 dark:border-sky-600 px-3 py-1.5 text-sm font-medium hover:bg-cyan-200/95 hover:dark:bg-sky-900/60">
+            Redes
+          </a>
+          <a routerLink="/pedidos"
+            routerLinkActive="bg-sky-300/85 shadow-sm dark:bg-sky-900/100 dark:border-sky-700 text-sky-950 dark:text-sky-200"
+            class="inline-flex items-center rounded-xl bg-sky-200 dark:bg-sky-900/50 border border-sky-300 dark:border-sky-600 px-3 py-1.5 text-sm font-medium hover:bg-cyan-200/95 hover:dark:bg-sky-900/60">
+            Mis pedidos
+          </a>
+        </nav>
+      </div>
+
+      <div class="flex justify-end items-center h-16 gap-4">
+        <div class="hidden min-[835px]:flex items-center gap-3"> <app-themetoggle class="h-8 flex items-center ml-3" />
+
+          <button *ngIf="!(isLoggedIn$ | async)" (click)="openDialog()"
+            class="px-4 py-2 bg-sky-500 hover:bg-sky-600 rounded-lg text-sm font-medium text-white transition">
+            Iniciar Sesión
+          </button>
+
+          <div *ngIf="currentUser$ | async as user" class="flex items-center gap-2">
+
+            <a [routerLink]="isInternal(user) ? '/admin' : '/carrito'"
+              routerLinkActive="bg-sky-300/85 shadow-sm dark:bg-sky-900/100 dark:border-sky-700 text-sky-950 dark:text-sky-200"
+              [attr.aria-label]="isInternal(user) ? 'Ir al Panel' : 'Ver carrito'"
+              [title]="isInternal(user) ? 'Ir al Panel' : 'Ver carrito'"
+              class="inline-flex items-center justify-center rounded-xl bg-sky-200 dark:bg-sky-900/50 border border-sky-300 dark:border-sky-600 p-2 text-sm font-medium hover:bg-cyan-200/95 hover:dark:bg-sky-900/60 transition-colors">
+              <mat-icon>{{ isInternal(user) ? 'dashboard' : 'shopping_cart' }}</mat-icon>
+            </a>
+
+            <a routerLink="/micuenta"
+              class="flex items-center gap-3 px-3 py-1.5 rounded-xl hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 transition-colors cursor-pointer group"
+              title="Ir a Mi Cuenta">
+              <img
+                [src]="'https://ui-avatars.com/api/?name=' + user.nombre+'%20'+user.apellido+'&size=45&background=random&color=fff'"
+                alt="Avatar LS" class="rounded-4xl group-hover:scale-105 transition-transform">
+              <div class="grid text-left">
+                <span class="text-sm font-medium text-sky-900 dark:text-sky-100 hidden lg:inline">
+                  {{ user.nombre}} <span>{{user.apellido}}</span>
+                </span>
+                <span class="text-xs font-medium text-sky-700 dark:text-sky-300 hidden lg:inline">
+                  {{ user.email.split('@')[0] }}&#64;...
+                </span>
+              </div>
+            </a>
+
+            <button (click)="onLogout()" aria-label="Cerrar Sesión" title="Cerrar Sesión"
+              class="px-2 pt-2 pb-1 bg-red-500 hover:bg-red-800 rounded-lg text-sm font-medium text-white transition">
+              <mat-icon>logout</mat-icon>
+            </button>
+          </div>
+
+        </div>
+        <app-themetoggle class="h-8 flex items-center min-[835px]:hidden" />
+        <button (click)="toggleMenu()" type="button"
+          class="min-[835px]:hidden p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500"
+          aria-controls="mobile-menu" [attr.aria-expanded]="isMenuOpen()">
+          <span class="sr-only">Abrir menú principal</span>
+          <svg *ngIf="!isMenuOpen()" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg *ngIf="isMenuOpen()" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu-container"
+  class="min-[835px]:hidden fixed inset-0 z-[100] transition-opacity duration-300 ease-in-out" [ngClass]="{
+          'visible pointer-events-auto opacity-100': isMenuOpen(),
+          'invisible pointer-events-none opacity-0': !isMenuOpen()
+        }">
+
+  <div (click)="toggleMenu()" class="fixed inset-0 bg-black/50 backdrop-blur-sm" aria-hidden="true">
+  </div>
+
+  <div
+    class="fixed top-0 right-0 bottom-0 z-[110] w-full max-w-60 bg-white dark:bg-neutral-900 shadow-xl transition-transform duration-300 ease-in-out transform"
+    [ngClass]="{
+              'translate-x-0': isMenuOpen(),
+              'translate-x-full': !isMenuOpen()
+            }" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
+
+    <div class="h-full flex flex-col">
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a (click)="toggleMenu()" routerLink="/"
+          routerLinkActive="bg-sky-100 dark:bg-sky-900 border-sky-500 text-sky-700 dark:text-sky-200"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="block rounded-lg border-l-4 border-transparent py-2.5 px-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800">
+          Inicio
+        </a>
+        <a (click)="toggleMenu()" routerLink="/catalogo"
+          routerLinkActive="bg-sky-100 dark:bg-sky-900 border-sky-500 text-sky-700 dark:text-sky-200"
+          class="block rounded-lg border-l-4 border-transparent py-2.5 px-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800">
+          Catalogo
+        </a>
+        <a (click)="toggleMenu()" routerLink="/nosotros"
+          routerLinkActive="bg-sky-100 dark:bg-sky-900 border-sky-500 text-sky-700 dark:text-sky-200"
+          class="block rounded-lg border-l-4 border-transparent py-2.5 px-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800">
+          Nosotros
+        </a>
+        <a (click)="toggleMenu()" routerLink="/contactanos"
+          routerLinkActive="bg-sky-100 dark:bg-sky-900 border-sky-500 text-sky-700 dark:text-sky-200"
+          class="block rounded-lg border-l-4 border-transparent py-2.5 px-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800">
+          Contactanos
+        </a>
+        <a (click)="toggleMenu()" routerLink="/redes"
+          routerLinkActive="bg-sky-100 dark:bg-sky-900 border-sky-500 text-sky-700 dark:text-sky-200"
+          class="block rounded-lg border-l-4 border-transparent py-2.5 px-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800">
+          Redes
+        </a>
+        <a (click)="toggleMenu()" routerLink="/pedidos"
+          routerLinkActive="bg-sky-100 dark:bg-sky-900 border-sky-500 text-sky-700 dark:text-sky-200"
+          class="block rounded-lg border-l-4 border-transparent py-2.5 px-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800">
+          Mis pedidos
+        </a>
+      </nav>
+
+      <div class="p-4 border-t border-neutral-300/40 dark:border-neutral-800/60 space-y-4">
+
+        <button *ngIf="!(isLoggedIn$ | async)" (click)="openDialog(); toggleMenu();"
+          class="w-full px-4 py-2 bg-sky-500 hover:bg-sky-600 rounded-lg text-sm font-medium text-white transition">
+          Iniciar Sesión
+        </button>
+
+        <div *ngIf="currentUser$ | async as user" class="flex flex-col items-center space-y-3">
+
+          <a [routerLink]="isInternal(user) ? '/admin' : '/carrito'" (click)="toggleMenu()"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-sky-200 dark:bg-sky-900/50 rounded-lg text-sm font-medium text-sky-900 dark:text-sky-100 transition-colors">
+            <mat-icon>{{ isInternal(user) ? 'dashboard' : 'shopping_cart' }}</mat-icon>
+            <span>{{ isInternal(user) ? 'Ir al Panel' : 'Ver Carrito' }}</span>
+          </a>
+
+          <a routerLink="/micuenta" (click)="toggleMenu()"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
+            <mat-icon>settings</mat-icon>
+            <span>Mi Cuenta</span>
+          </a>
+
+          <img
+            [src]="'https://ui-avatars.com/api/?name=' + user.nombre+'%20'+user.apellido+'&size=45&background=random&color=fff'"
+            alt="Avatar LS" class="rounded-full w-12 h-12">
+
+          <div class="text-center">
+            <span class="text-sm font-medium text-sky-900 dark:text-sky-100"
+              [title]="user.nombre + ' ' + user.apellido">
+              {{ user.nombre}} {{user.apellido}}
+            </span>
+            <span class="block text-xs text-gray-600 dark:text-gray-400 truncate" [title]="user.email">
+              {{ user.email }}
+            </span>
+          </div>
+
+          <button (click)="onLogout()"
+            class="w-full px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm font-medium text-white transition flex items-center justify-center gap-2">
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

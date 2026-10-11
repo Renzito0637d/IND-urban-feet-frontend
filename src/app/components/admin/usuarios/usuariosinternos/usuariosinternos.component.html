@@ -1,0 +1,109 @@
+<div class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 min-w-[300px] sm:min-w-[500px]">
+
+    <!-- HEADER: Color diferente (Indigo) -->
+    <div
+        class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center bg-indigo-50 dark:bg-indigo-900/20">
+        <div>
+            <h2 class="text-xl font-bold text-indigo-700 dark:text-indigo-300">
+                {{ isEditMode ? 'Editar Usuario' : 'Nuevo Usuario Interno' }}
+            </h2>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                {{ isEditMode ? 'Modificar permisos o datos.' : 'Crear cuenta administrativa o de staff.' }}
+            </p>
+        </div>
+        <button (click)="onCancel()" class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- BODY -->
+    <mat-dialog-content class="!p-6 max-h-[80vh] overflow-y-auto">
+
+        <div *ngIf="errorMessage" class="mb-4 p-3 rounded-lg bg-red-100 border border-red-200 text-red-700 text-sm">
+            {{ errorMessage }}
+        </div>
+
+        <form [formGroup]="internalForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+            <!-- SELECCION DE ROL -->
+            <div
+                class="p-4 rounded-xl bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-800/30">
+                <label class="text-sm font-bold text-indigo-800 dark:text-indigo-300 mb-1 block">Asignar Rol</label>
+                <select formControlName="role"
+                    class="w-full rounded-lg border border-indigo-200 dark:border-indigo-800 bg-white dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
+                    <option *ngFor="let role of availableRoles" [value]="role">
+                        {{ formatRole(role) }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Nombre</label>
+                    <input type="text" formControlName="nombre"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+                        [class.ring-red-500]="internalForm.get('nombre')?.invalid && internalForm.get('nombre')?.touched">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Apellido</label>
+                    <input type="text" formControlName="apellido"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Correo Corporativo</label>
+                <input type="email" formControlName="email" placeholder="empleado@empresa.com"
+                    class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div class="col-span-1 space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Tipo</label>
+                    <select formControlName="documentType"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                        <option *ngFor="let type of docTypes" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+                <div class="col-span-2 space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Nro. Documento</label>
+                    <input type="text" formControlName="documentNumber"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Teléfono</label>
+                    <input type="tel" formControlName="phone"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                </div>
+
+                <!-- PASSWORD OCULTO EN MODO EDITAR -->
+                <div class="space-y-1" *ngIf="!isEditMode">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Contraseña</label>
+                    <input type="password" formControlName="password" placeholder="••••••••"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                </div>
+            </div>
+
+        </form>
+    </mat-dialog-content>
+
+    <!-- ACTIONS -->
+    <mat-dialog-actions align="end"
+        class="!px-6 !py-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50">
+        <button mat-button (click)="onCancel()"
+            class="!text-neutral-600 dark:!text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-lg">
+            Cancelar
+        </button>
+        <button mat-flat-button (click)="onSubmit()" [disabled]="internalForm.invalid || loading"
+            class="!bg-indigo-600 dark:!bg-indigo-500 !text-white !font-bold !rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:!opacity-90 transition-opacity ml-2">
+            <span *ngIf="!loading">{{ isEditMode ? 'Actualizar' : 'Crear Usuario' }}</span>
+            <span *ngIf="loading">Procesando...</span>
+        </button>
+    </mat-dialog-actions>
+
+</div>

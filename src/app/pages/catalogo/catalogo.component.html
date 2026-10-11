@@ -1,0 +1,195 @@
+<section class="bg-neutral-200 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-200">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-12 gap-6 lg:gap-8">
+
+      <!-- ASIDE: FILTROS -->
+      <aside class="col-span-12 md:col-span-4 lg:col-span-3">
+
+        <div class="md:sticky md:top-24 space-y-4">
+
+          <button (click)="showMobileFilters = !showMobileFilters"
+            class="md:hidden w-full flex items-center justify-between bg-white dark:bg-neutral-900 p-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm transition-all hover:bg-neutral-50 dark:hover:bg-neutral-800">
+            <span class="font-bold flex items-center gap-2">
+              <mat-icon class="text-cyan-500">tune</mat-icon>
+              {{ showMobileFilters ? 'Ocultar Filtros' : 'Filtrar Productos' }}
+            </span>
+            <mat-icon class="transition-transform duration-300"
+              [class.rotate-180]="showMobileFilters">expand_more</mat-icon>
+          </button>
+
+          <div [class.hidden]="!showMobileFilters" class="space-y-4 md:block animate-fade-in">
+
+            <div
+              class="hidden md:block rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-300/50 dark:ring-neutral-800 p-5">
+              <h2 class="text-xl font-bold text-cyan-500 dark:text-cyan-400 flex items-center gap-2">
+                <mat-icon>filter_list</mat-icon> Filtrar por
+              </h2>
+            </div>
+
+            <div
+              class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-300/50 dark:ring-neutral-800 p-5 shadow-sm">
+              <label class="block text-sm font-bold mb-3 uppercase tracking-wider text-neutral-500">Marcas</label>
+              <div class="grid grid-cols-2 gap-3">
+                <label *ngFor="let m of marcasList" class="cursor-pointer flex items-center gap-2 group">
+                  <input type="checkbox" 
+                         [checked]="filtros.marcas?.includes(m)"
+                         (change)="toggleMarca(m, $event)"
+                         class="size-4 rounded border-gray-300 text-cyan-500 focus:ring-cyan-400 transition" />
+                  <span class="group-hover:text-cyan-600 transition">{{ m }}</span>
+                </label>
+              </div>
+            </div>
+
+            <div
+              class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-300/50 dark:ring-neutral-800 p-5 shadow-sm">
+              <label class="block text-sm font-bold mb-3 uppercase tracking-wider text-neutral-500">Género</label>
+              <div class="flex flex-col gap-2">
+                <label class="inline-flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="genero" value="" [(ngModel)]="filtros.genero" class="size-4 text-cyan-500 focus:ring-cyan-400" />
+                  <span>Todos</span>
+                </label>
+                <label class="inline-flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="genero" value="Hombre" [(ngModel)]="filtros.genero" class="size-4 text-cyan-500 focus:ring-cyan-400" />
+                  <span>Hombre</span>
+                </label>
+                <label class="inline-flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="genero" value="Mujer" [(ngModel)]="filtros.genero" class="size-4 text-cyan-500 focus:ring-cyan-400" />
+                  <span>Mujer</span>
+                </label>
+              </div>
+            </div>
+
+            <div
+              class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-300/50 dark:ring-neutral-800 p-5 shadow-sm">
+              <label class="block text-sm font-bold mb-3 uppercase tracking-wider text-neutral-500">Tipo</label>
+              <div class="flex flex-wrap gap-2">
+                <button *ngFor="let t of ['Deportiva', 'Formal', 'Casual','Outdoor','Fútbol','Running','Training']"
+                  (click)="seleccionarTipo(t)"
+                  class="px-3 py-1.5 rounded-lg text-sm font-medium transition border"
+                  [ngClass]="filtros.tipo === t 
+                    ? 'bg-cyan-500 text-white border-cyan-500' 
+                    : 'bg-neutral-100 dark:bg-neutral-800 border-transparent hover:bg-cyan-100 dark:hover:bg-cyan-900/30 hover:text-cyan-700 dark:hover:text-cyan-300'">
+                  {{ t }}
+                </button>
+              </div>
+            </div>
+
+            <div class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-300/50 dark:ring-neutral-800 p-5">
+              <label class="block text-sm font-semibold mb-3">Tallas (PE)</label>
+              <div class="grid grid-cols-6 gap-2">
+                <button *ngFor="let t of tallasList"
+                  (click)="seleccionarTalla(t)"
+                  class="text-sm rounded-lg px-2 py-1 transition border"
+                  [ngClass]="filtros.talla === t 
+                    ? 'bg-cyan-500 text-white border-cyan-500' 
+                    : 'bg-neutral-100 dark:bg-neutral-800 border-transparent hover:ring-2 ring-cyan-400/60 dark:ring-cyan-300/60'">
+                  {{ t }}
+                </button>
+              </div>
+            </div>
+
+            <div class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-300/50 dark:ring-neutral-800 p-5">
+              <label class="block text-sm font-semibold mb-3">Precio (S/)</label>
+              <div class="flex items-center gap-3">
+                <input type="number" [(ngModel)]="filtros.min" placeholder="Mín"
+                  class="w-1/2 rounded-lg bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm focus:ring-2 focus:ring-cyan-400 outline-none" />
+                
+                <input type="number" [(ngModel)]="filtros.max" placeholder="Máx"
+                  class="w-1/2 rounded-lg bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm focus:ring-2 focus:ring-cyan-400 outline-none" />
+              </div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+              <button (click)="aplicarFiltros()"
+                class="flex-1 rounded-xl bg-cyan-400 dark:bg-cyan-300 text-neutral-900 font-bold px-4 py-3 hover:opacity-90 shadow-lg shadow-cyan-500/20 active:scale-95 transition">
+                Aplicar
+              </button>
+              <button (click)="limpiarFiltros()"
+                class="flex-1 rounded-xl border border-neutral-300 dark:border-neutral-700 px-4 py-3 text-center font-semibold hover:bg-neutral-100 dark:hover:bg-neutral-800 active:scale-95 transition">
+                Limpiar
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </aside>
+
+      <!-- GRID: PRODUCTOS -->
+      <div class="col-span-12 md:col-span-8 lg:col-span-9">
+        <!-- Headline + count -->
+        <div class="mb-4 flex items-center justify-between">
+          <h3 class="text-xl font-bold">Productos</h3>
+        </div>
+
+        <!-- Grid de cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+
+          <ng-container *ngIf="loading">
+            <div *ngFor="let i of [1,2,3,4]" class="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-80 rounded-2xl">
+            </div>
+          </ng-container>
+
+          <article *ngFor="let zap of zapatillas"
+            class="group rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-300/50 dark:ring-neutral-800 overflow-hidden hover:shadow-lg transition flex flex-col">
+
+            <div class="relative">
+              <div class="aspect-[4/3] bg-neutral-100 dark:bg-neutral-100 flex items-center justify-center p-4">
+                <img [src]="getDisplayImage(zap)" [alt]="zap.nombre"
+                  class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                  style="mix-blend-mode: multiply;">
+              </div>
+            </div>
+
+            <div class="p-4 space-y-2 flex flex-col flex-1">
+              <h4 class="text-sm font-semibold truncate" [title]="zap.nombre">{{ zap.nombre }}</h4>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                {{ zap.tipo }} • {{ zap.genero }}
+              </p>
+
+              <div class="mt-auto flex flex-col gap-2">
+                <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+                  {{ getDisplayPrice(zap) | currency:'S/ ':'symbol' }}
+                </span>
+
+                <button (click)="openDialog(zap)"
+                  class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-neutral-900 dark:bg-neutral-200 text-white dark:text-neutral-900 px-4 py-2 text-sm font-semibold hover:opacity-90 transition-opacity">
+                  Ver más
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Paginación (estática) -->
+        <nav *ngIf="totalPages > 0" class="mt-12 flex items-center justify-center gap-2 select-none">
+
+          <button (click)="anteriorPagina()" [disabled]="isFirst" [class.opacity-50]="isFirst"
+            [class.cursor-not-allowed]="isFirst"
+            class="px-4 py-2 rounded-lg ring-1 ring-neutral-300 dark:ring-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-sm font-medium transition-colors">
+            Anterior
+          </button>
+
+          <button *ngFor="let pageNum of pageNumbers" (click)="cambiarPagina(pageNum)"
+            class="px-4 py-2 rounded-lg text-sm font-semibold transition-all" [ngClass]="{
+             'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 shadow-md transform scale-105': pageNum === currentPage,
+             'ring-1 ring-neutral-300 dark:ring-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400': pageNum !== currentPage
+          }">
+            {{ pageNum + 1 }}
+          </button>
+
+          <button (click)="siguientePagina()" [disabled]="isLast" [class.opacity-50]="isLast"
+            [class.cursor-not-allowed]="isLast"
+            class="px-4 py-2 rounded-lg ring-1 ring-neutral-300 dark:ring-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-sm font-medium transition-colors">
+            Siguiente
+          </button>
+
+        </nav>
+
+        <div class="text-center mt-4 text-xs text-neutral-500">
+          Página {{ currentPage + 1 }} de {{ totalPages }} (Total: {{ totalElements }} productos)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

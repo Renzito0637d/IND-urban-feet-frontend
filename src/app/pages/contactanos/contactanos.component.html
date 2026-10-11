@@ -1,0 +1,70 @@
+<section class="bg-neutral-200 dark:bg-neutral-950 py-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-cyan-400 dark:text-cyan-300">Contáctanos</h2>
+      <p class="mt-4 text-neutral-700 dark:text-neutral-300">
+        ¿Tienes comentarios, sugerencias o dudas? Completa el formulario y nuestro equipo de UrbanFeet se pondrá en contacto contigo lo antes posible.
+      </p>
+    </div>
+
+    <div class="bg-white dark:bg-neutral-900 shadow-sm ring-1 ring-neutral-300/50 dark:ring-neutral-800 rounded-2xl p-8 space-y-6">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium mb-2 text-cyan-900 dark:text-cyan-300">Nombre</label>
+          <input
+            type="text"
+            [value]="nombreUsuario"
+            class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 px-4 py-3 cursor-not-allowed text-neutral-500"
+            readonly
+            placeholder="Inicia sesión para ver tu nombre"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-2 text-cyan-900 dark:text-cyan-300">Correo electrónico</label>
+          <input
+            type="text"
+            [value]="emailUsuario"
+            class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 px-4 py-3 cursor-not-allowed text-neutral-500"
+            readonly
+            placeholder="Inicia sesión para ver tu correo"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2 text-cyan-900 dark:text-cyan-300">Asunto</label>
+        <input
+          type="text"
+          [(ngModel)]="asunto"
+          class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-4 py-3 focus:ring-2 focus:ring-cyan-400 outline-none transition"
+          placeholder="Escribe el asunto de tu mensaje"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2 text-cyan-900 dark:text-cyan-300">Mensaje</label>
+        <textarea
+          rows="5"
+          [(ngModel)]="mensaje"
+          class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-4 py-3 focus:ring-2 focus:ring-cyan-400 outline-none transition"
+          placeholder="Cuéntanos en qué podemos ayudarte..."
+        ></textarea>
+      </div>
+
+      <div class="text-center">
+        <button
+          type="button"
+          (click)="enviarFormulario()"
+          class="inline-flex items-center justify-center rounded-xl px-6 py-3 font-semibold bg-cyan-400 dark:bg-cyan-300 text-neutral-900 hover:opacity-90 transition active:scale-95"
+        >
+          Enviar mensaje
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,125 @@
+<mat-sidenav-container class="h-screen">
+  <mat-sidenav #drawer [mode]="(isHandset | async)?.matches ? 'over' : 'side'" [opened]="!(isHandset | async)?.matches"
+    class="admin-sidenav">
+    <!-- WRAPPER FLEX -->
+    <div class="flex flex-col h-full">
+      <!-- Header -->
+      <div class="sidenav-header px-5 py-4 flex items-center gap-3">
+        <div class="mx-auto shrink-0 flex items-center text-black dark:text-sky-100">
+          <a href="/"><img src="/img/logo.webp" alt="UrbanFeet" class="h-16 w-auto" /></a>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Menú con grow (empuja el footer) -->
+      <ng-container *ngIf="currentUser$ | async as user">
+
+        <mat-nav-list class="grow">
+
+          <a mat-list-item routerLink="/admin" routerLinkActive="mat-mdc-list-item-active"
+            [routerLinkActiveOptions]="{ exact: true }" (click)="closeIfHandset()">
+            <mat-icon matListItemIcon class="!text-cyan-400 dark:!text-cyan-300">home</mat-icon>
+            <span matListItemTitle>Inicio</span>
+          </a>
+
+          <a mat-list-item [routerLink]="hasAccess(user, ['ADMIN']) ? '/admin/usuarios' : null"
+            routerLinkActive="mat-mdc-list-item-active"
+            (click)="hasAccess(user, ['ROLE_ADMIN']) ? closeIfHandset() : null"
+            [class.opacity-50]="!hasAccess(user, ['ROLE_ADMIN'])"
+            [class.pointer-events-none]="!hasAccess(user, ['ROLE_ADMIN'])"
+            [class.cursor-not-allowed]="!hasAccess(user, ['ROLE_ADMIN'])">
+            <mat-icon matListItemIcon class="!text-cyan-400 dark:!text-cyan-300">group</mat-icon>
+            <span matListItemTitle>Usuarios</span>
+          </a>
+
+          <a mat-list-item [routerLink]="hasAccess(user, ['ROLE_INVENTARIO']) ? '/admin/zapatillas' : null"
+            routerLinkActive="mat-mdc-list-item-active"
+            (click)="hasAccess(user, ['ROLE_INVENTARIO']) ? closeIfHandset() : null"
+            [class.opacity-50]="!hasAccess(user, ['ROLE_INVENTARIO'])"
+            [class.pointer-events-none]="!hasAccess(user, ['ROLE_INVENTARIO'])">
+            <svg matListItemIcon xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-footprints-icon lucide-footprints !text-cyan-400 dark:!text-cyan-300">
+              <path
+                d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z" />
+              <path
+                d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z" />
+              <path d="M16 17h4" />
+              <path d="M4 13h4" />
+            </svg>
+            <span matListItemTitle>Zapatillas</span>
+          </a>
+
+          <a mat-list-item [routerLink]="hasAccess(user, ['ROLE_PEDIDOS']) ? '/admin/pedidos' : null"
+            routerLinkActive="mat-mdc-list-item-active"
+            (click)="hasAccess(user, ['ROLE_PEDIDOS']) ? closeIfHandset() : null"
+            [class.opacity-50]="!hasAccess(user, ['ROLE_PEDIDOS'])"
+            [class.pointer-events-none]="!hasAccess(user, ['ROLE_PEDIDOS'])">
+            <mat-icon matListItemIcon class="!text-cyan-400 dark:!text-cyan-300">receipt_long</mat-icon>
+            <span matListItemTitle>Pedidos</span>
+          </a>
+
+          <a mat-list-item [routerLink]="hasAccess(user, ['ROLE_VENTAS']) ? '/admin/ventas' : null"
+            routerLinkActive="mat-mdc-list-item-active"
+            (click)="hasAccess(user, ['ROLE_VENTAS']) ? closeIfHandset() : null"
+            [class.opacity-50]="!hasAccess(user, ['ROLE_VENTAS'])"
+            [class.pointer-events-none]="!hasAccess(user, ['ROLE_VENTAS'])">
+            <mat-icon matListItemIcon class="!text-cyan-400 dark:!text-cyan-300">local_offer</mat-icon>
+            <span matListItemTitle>Ventas</span>
+          </a>
+
+          <a mat-list-item routerLink="/admin/reclamaciones" routerLinkActive="mat-mdc-list-item-active"
+            (click)="closeIfHandset()">
+            <mat-icon matListItemIcon class="!text-cyan-400 dark:!text-cyan-300">feedback</mat-icon>
+            <span matListItemTitle>Reclamaciones</span>
+          </a>
+
+          <a mat-list-item routerLink="/admin/sugerencias" routerLinkActive="mat-mdc-list-item-active"
+            (click)="closeIfHandset()">
+            <mat-icon matListItemIcon class="!text-cyan-400 dark:!text-cyan-300">lightbulb_outline</mat-icon>
+            <span matListItemTitle>Sugerencias</span>
+          </a>
+
+        </mat-nav-list>
+      </ng-container>
+
+      <!-- Footer (queda abajo gracias al grow del menú) -->
+      <div class="p-4 border-t border-neutral-700">
+
+        <div *ngIf="currentUser$ | async as user" class="flex items-center gap-3 mb-3">
+
+          <img
+            [src]="'https://ui-avatars.com/api/?name=' + user.nombre+'%20'+user.apellido+'&size=45&background=random&color=fff'"
+            class="w-10 h-10 rounded-full border" alt="Foto perfil">
+
+          <div>
+            <p class="font-semibold">{{ user.nombre }} {{ user.apellido }}</p>
+            <p class="text-sm text-gray-400 truncate" [title]="user.email">{{ user.email }}</p>
+          </div>
+        </div>
+
+        <button (click)="onLogout()" mat-stroked-button color="primary" class="w-full flex items-center gap-2">
+          <mat-icon>logout</mat-icon>
+          Cerrar sesión
+        </button>
+
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="admin-toolbar">
+      <button mat-icon-button (click)="drawer.toggle()" aria-label="Abrir menú">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="flex-1">Panel de Administración</span>
+      <app-themetoggle class="h-6 flex items-center" />
+
+    </mat-toolbar>
+
+    <div class="p-4">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

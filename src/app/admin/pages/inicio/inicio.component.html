@@ -1,0 +1,184 @@
+<section
+    class="text-neutral-800 dark:text-neutral-200 min-h-screen py-8">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+
+            <div
+                class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 p-5 shadow-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
+                        <span class="material-icons text-xl">payments</span>
+                    </div>
+                    <div class="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Ventas Totales</div>
+                </div>
+                <div class="text-2xl font-bold text-neutral-900 dark:text-white">
+                    {{ totalVentas | currency:'S/ ':'symbol':'1.0-0' }}
+                </div>
+            </div>
+
+            <div
+                class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 p-5 shadow-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
+                        <span class="material-icons text-xl">shopping_bag</span>
+                    </div>
+                    <div class="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Pedidos</div>
+                </div>
+                <div class="text-2xl font-bold text-neutral-900 dark:text-white">
+                    {{ totalPedidos }}
+                </div>
+            </div>
+
+            <div
+                class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 p-5 shadow-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div
+                        class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-purple-600 dark:text-purple-400">
+                        <span class="material-icons text-xl">group</span>
+                    </div>
+                    <div class="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Clientes</div>
+                </div>
+                <div class="text-2xl font-bold text-neutral-900 dark:text-white">
+                    {{ totalUsuarios }}
+                </div>
+            </div>
+
+            <div
+                class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 p-5 shadow-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div
+                        class="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-orange-600 dark:text-orange-400">
+                        <span class="material-icons text-xl">inventory_2</span>
+                    </div>
+                    <div class="text-sm text-neutral-500 dark:text-neutral-400 font-medium">Productos</div>
+                </div>
+                <div class="text-2xl font-bold text-neutral-900 dark:text-white">
+                    {{ totalProductos }}
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+
+            <div
+                class="lg:col-span-2 rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-bold text-lg">Ingresos por fecha</h3>
+                    <select (change)="onRangeChange($event)"
+                        class="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 cursor-pointer">
+                        <option value="7d">Últimos 7 días</option>
+                        <option value="30d">Últimos 30 días</option>
+                    </select>
+                </div>
+
+                <div class="w-full h-64 md:h-80">
+                    <svg viewBox="0 0 100 60" class="w-full h-full overflow-visible">
+                        <g [attr.stroke]="palette.grid" stroke-width="0.3" stroke-dasharray="2,2">
+                            <line *ngFor="let y of gridYs" x1="8" [attr.y1]="y" x2="98" [attr.y2]="y" />
+                        </g>
+                        <g [attr.stroke]="palette.grid" stroke-width="0.5">
+                            <line x1="8" y1="6" x2="8" y2="52" />
+                            <line x1="8" y1="52" x2="98" y2="52" />
+                        </g>
+                        <path [attr.d]="areaPath" [attr.fill]="palette.area" />
+                        <path [attr.d]="linePath" [attr.stroke]="palette.line" fill="none" stroke-width="1"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <g [attr.fill]="palette.line">
+                            <circle *ngFor="let p of points" [attr.cx]="p.x" [attr.cy]="p.y" r="1.2"
+                                class="hover:r-2 transition-all cursor-pointer">
+                                <title>Venta</title>
+                            </circle>
+                        </g>
+                        <g font-size="2.5" [attr.fill]="palette.ticks" font-family="sans-serif">
+                            <text *ngFor="let lx of xLabelsLimited" [attr.x]="lx.x" y="57" text-anchor="middle">{{
+                                lx.label }}</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <div
+                class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 p-6 shadow-sm">
+                <h3 class="font-bold text-lg mb-6">Más Vendidos</h3>
+
+                <div *ngIf="topProductos.length === 0" class="text-neutral-500 text-sm italic text-center py-10">
+                    No hay datos de ventas aún.
+                </div>
+
+                <ul class="space-y-5">
+                    <li *ngFor="let prod of topProductos">
+                        <div class="flex items-center justify-between text-sm mb-1.5">
+                            <span class="font-medium truncate pr-2 text-neutral-700 dark:text-neutral-300">{{ prod.name
+                                }}</span>
+                            <span class="font-bold text-neutral-900 dark:text-white">{{ prod.quantity }} u.</span>
+                        </div>
+                        <div class="h-2.5 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+                            <div class="h-full rounded-full bg-cyan-400 dark:bg-cyan-500 transition-all duration-1000 ease-out"
+                                [style.width.%]="prod.percentage"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div
+            class="rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 overflow-hidden shadow-sm">
+            <div
+                class="px-6 py-5 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+                <h3 class="font-bold text-lg">Pedidos Recientes</h3>
+                <a routerLink="/admin/pedidos"
+                    class="text-sm font-bold text-cyan-600 dark:text-cyan-400 hover:underline">Ver todos</a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead
+                        class="bg-neutral-50 dark:bg-neutral-800/50 text-neutral-500 dark:text-neutral-400 uppercase text-xs font-bold tracking-wider">
+                        <tr>
+                            <th class="px-6 py-3">ID</th>
+                            <th class="px-6 py-3">Fecha</th>
+                            <th class="px-6 py-3">Cliente</th>
+                            <th class="px-6 py-3">Estado</th>
+                            <th class="px-6 py-3">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-neutral-200 dark:divide-neutral-800">
+                        <tr *ngFor="let p of pedidosRecientes"
+                            class="even:bg-neutral-50 dark:even:bg-neutral-800">
+                            <td class="px-6 py-4 font-bold text-neutral-900 dark:text-white">#{{ p.id }}</td>
+                            <td class="px-6 py-4 text-neutral-600 dark:text-neutral-400">{{ p.fechaPedido |
+                                date:'shortDate' }}</td>
+                            <td class="px-6 py-4 font-medium text-neutral-900 dark:text-white">
+                                {{ p.nombreUsuario }} {{ p.apellidoUsuario }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold"
+                                    [ngClass]="{
+                                        'bg-yellow-100 text-yellow-700': p.estado === 'PENDIENTE',
+                                        'bg-blue-100 text-blue-700': p.estado === 'ENVIADO' || p.estado === 'PREPARANDO',
+                                        'bg-green-100 text-green-700': p.estado === 'ENTREGADO',
+                                        'bg-red-100 text-red-700': p.estado === 'CANCELADO'
+                                    }">
+                                    <span class="size-1.5 rounded-full bg-current"></span>
+                                    {{ p.estado }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 font-bold text-neutral-900 dark:text-white">
+                                {{ calcularTotalPedido(p) | currency:'S/ ':'symbol' }}
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="pedidosRecientes.length === 0">
+                            <td colspan="5" class="px-6 py-8 text-center text-neutral-500 italic">No hay pedidos
+                                recientes.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>

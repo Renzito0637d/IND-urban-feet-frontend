@@ -1,0 +1,95 @@
+<footer class="bg-neutral-900 text-neutral-200">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
+
+      <!-- Col 1: Marca / Reclamos -->
+      <div class="space-y-4">
+        <!-- Logo principal -->
+        <a routerLink="/inicio" class="inline-flex items-center gap-3 group">
+          <img src="/img/logo.webp" alt="UrbanFeet" class="h-16 w-auto">
+        </a>
+
+        <!-- Libro de Reclamaciones -->
+        <a routerLink="/reclamos" class="block">
+          <img
+          src="/img/libroreclacion.webp"
+          alt="Libro de Reclamaciones"
+          class="w-full max-w-xs rounded-lg ring-1 ring-white/10 hover:ring-white/30 transition"
+          >
+        </a>
+
+      </div>
+
+      <!-- Col separadora en LG para emular tu grid original -->
+      <div class="hidden lg:block"></div>
+
+      <!-- Col 2: Menú -->
+      <div>
+        <h5 class="text-white font-semibold mb-4">Menú</h5>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/inicio" class="text-neutral-300 hover:text-white transition">Inicio</a></li>
+          <li><a href="/catalogo" class="text-neutral-300 hover:text-white transition">Catálogo</a></li>
+          <li><a href="/nosotros" class="text-neutral-300 hover:text-white transition">Nosotros</a></li>
+          <li><a href="/reclamos" class="text-neutral-300 hover:text-white transition">Contáctanos</a></li>
+          <li><a href="/redes" class="text-neutral-300 hover:text-white transition">Redes</a></li>
+          <li><a href="/MisPedidos" class="text-neutral-300 hover:text-white transition">Mis pedidos</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Redes -->
+      <div>
+        <h5 class="text-white font-semibold mb-4">Redes</h5>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="https://facebook.com" target="_blank" class="inline-flex items-center gap-2 text-neutral-300 hover:text-white transition">
+              <!-- icono fb -->
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg>
+              Facebook
+            </a>
+          </li>
+          <li>
+            <a href="https://instagram.com" target="_blank" class="inline-flex items-center gap-2 text-neutral-300 hover:text-white transition">
+              <!-- icono ig -->
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm0 2h10c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3zm11 2a1 1 0 100 2 1 1 0 000-2zM12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+              Instagram
+            </a>
+          </li>
+          <li>
+            <a href="https://twitter.com" target="_blank" class="inline-flex items-center gap-2 text-neutral-300 hover:text-white transition">
+              <!-- icono x/twitter -->
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.7 3H17l-5 6.2L7.3 3H3l6.6 9.2L3.4 21h3.7l5.3-6.7 4.1 6.7h3.6l-6.8-9.8L20.7 3z"/></svg>
+              Twitter
+            </a>
+          </li>
+          <li>
+            <a href="https://tiktok.com" target="_blank" class="inline-flex items-center gap-2 text-neutral-300 hover:text-white transition">
+              <!-- icono tiktok -->
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M21 8.1a6.7 6.7 0 01-4.3-1.5v7.2a6.8 6.8 0 11-5.9-6.7v3.2a3.6 3.6 0 103 3.6V2h2.2a4.6 4.6 0 004.9 4.2V8.1z"/></svg>
+              Tiktok
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Catálogo -->
+      <div>
+        <h5 class="text-white font-semibold mb-4">Catálogo</h5>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/catalogo?genero=Mujer" class="text-neutral-300 hover:text-white transition">Mujer</a></li>
+          <li><a href="/catalogo?genero=Hombre" class="text-neutral-300 hover:text-white transition">Hombre</a></li>
+          <li><a href="/catalogo?genero=Niña" class="text-neutral-300 hover:text-white transition">Niñas</a></li>
+          <li><a href="/catalogo?genero=Niño" class="text-neutral-300 hover:text-white transition">Niños</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="border-t border-white/10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+      <p class="text-center text-xs text-neutral-400">
+        Copyright © 2025 — UrbanFeet — Todos los derechos reservados
+      </p>
+    </div>
+  </div>
+</footer>

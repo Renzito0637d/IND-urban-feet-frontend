@@ -1,0 +1,95 @@
+<div class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 min-w-[300px] sm:min-w-[500px]">
+
+    <!-- HEADER DINÁMICO -->
+    <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+        <div>
+            <h2 class="text-xl font-bold">{{ isEditMode ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                {{ isEditMode ? 'Actualiza los datos del usuario.' : 'Registra un nuevo usuario final.' }}
+            </p>
+        </div>
+        <button (click)="onCancel()" class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- BODY -->
+    <mat-dialog-content class="!p-6 max-h-[80vh] overflow-y-auto">
+
+        <div *ngIf="errorMessage" class="mb-4 p-3 rounded-lg bg-red-100 border border-red-200 text-red-700 text-sm">
+            {{ errorMessage }}
+        </div>
+
+        <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Nombre</label>
+                    <input type="text" formControlName="nombre" placeholder="Ej. Juan"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+                        [class.ring-red-500]="clientForm.get('nombre')?.invalid && clientForm.get('nombre')?.touched">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Apellido</label>
+                    <input type="text" formControlName="apellido" placeholder="Ej. Pérez"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Correo Electrónico</label>
+                <!-- El input aparecerá gris (disabled) si estamos en modo edición -->
+                <input type="email" formControlName="email" placeholder="cliente@ejemplo.com"
+                    class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div class="col-span-1 space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Tipo</label>
+                    <select formControlName="documentType"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                        <option *ngFor="let type of docTypes" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+                <div class="col-span-2 space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Nro. Documento</label>
+                    <input type="text" formControlName="documentNumber" placeholder="Ej. 12345678"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Teléfono</label>
+                    <input type="tel" formControlName="phone" placeholder="Ej. 987654321"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                </div>
+
+                <!-- CONTRASEÑA: SOLO SE MUESTRA SI NO ESTAMOS EDITANDO -->
+                <div class="space-y-1" *ngIf="!isEditMode">
+                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Contraseña</label>
+                    <input type="password" formControlName="password" placeholder="••••••••"
+                        class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all">
+                </div>
+            </div>
+
+        </form>
+    </mat-dialog-content>
+
+    <!-- ACTIONS -->
+    <mat-dialog-actions align="end"
+        class="!px-6 !py-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50">
+        <button mat-button (click)="onCancel()"
+            class="!text-neutral-600 dark:!text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-lg">
+            Cancelar
+        </button>
+        <button mat-flat-button (click)="onSubmit()" [disabled]="clientForm.invalid || loading"
+            class="!bg-cyan-400 dark:!bg-cyan-300 !text-neutral-900 !font-bold !rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:!opacity-90 transition-opacity ml-2">
+            <span *ngIf="!loading">{{ isEditMode ? 'Actualizar' : 'Guardar' }}</span>
+            <span *ngIf="loading">Procesando...</span>
+        </button>
+    </mat-dialog-actions>
+</div>

@@ -1,0 +1,176 @@
+<div class="w-full sm:min-w-[500px] bg-white dark:bg-neutral-900 rounded-lg overflow-hidden flex flex-col max-h-[90vh]">
+
+    <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950">
+        <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <span class="material-icons text-cyan-500">payment</span>
+            Confirmar Pedido
+        </h2>
+        <p class="text-sm text-neutral-500 mt-1">Selecciona dónde recibirás tu compra.</p>
+    </div>
+
+    <div class="p-6 overflow-y-auto">
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+            <h3 class="text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-3 uppercase tracking-wider">
+                Dirección de Envío
+            </h3>
+
+            <div *ngIf="loadingDir" class="space-y-3 animate-pulse mb-6">
+                <div class="h-16 bg-neutral-100 dark:bg-neutral-800 rounded-xl"></div>
+                <div class="h-16 bg-neutral-100 dark:bg-neutral-800 rounded-xl"></div>
+            </div>
+
+            <div *ngIf="!loadingDir" class="space-y-3 mb-8">
+
+                <div *ngIf="direcciones.length === 0"
+                    class="text-center py-6 border-2 border-dashed border-neutral-300 rounded-xl">
+                    <p class="text-neutral-500 mb-2">No tienes direcciones registradas.</p>
+                    <a routerLink="/micuenta" (click)="onCancel()" class="text-cyan-600 font-bold hover:underline text-sm">Agregar dirección</a>
+                </div>
+
+                <label *ngFor="let dir of direcciones"
+                    class="relative flex items-start gap-4 p-4 rounded-xl border cursor-pointer transition-all hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                    [class.border-cyan-500]="form.get('direccionId')?.value === dir.id"
+                    [class.bg-cyan-50]="form.get('direccionId')?.value === dir.id"
+                    [class.dark:bg-cyan-900]="form.get('direccionId')?.value === dir.id"
+                    [class.border-neutral-200]="form.get('direccionId')?.value !== dir.id"
+                    [class.dark:border-neutral-800]="form.get('direccionId')?.value !== dir.id">
+
+                    <input type="radio" formControlName="direccionId" [value]="dir.id"
+                        class="mt-1 text-cyan-600 focus:ring-cyan-500">
+
+                    <div class="flex-1">
+                        <span class="block font-bold text-neutral-900 dark:text-neutral-100 text-sm">{{ dir.calle
+                            }}</span>
+                        <span class="block text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                            {{ dir.distrito }}, {{ dir.provincia }}
+                        </span>
+                        <span *ngIf="dir.referencia" class="block text-[10px] text-neutral-400 mt-1 italic">
+                            Ref: {{ dir.referencia }}
+                        </span>
+                    </div>
+                </label>
+            </div>
+
+            <h3
+                class="text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-3 uppercase tracking-wider border-t border-neutral-200 dark:border-neutral-800 pt-6">
+                Método de Pago
+            </h3>
+
+            <div class="grid grid-cols-3 gap-3 mb-8" [formGroup]="form">
+
+                <label class="cursor-pointer">
+                    <input type="radio" formControlName="metodoPago" value="TARJETA" class="peer sr-only">
+                    <div
+                        class="rounded-xl border border-neutral-200 dark:border-neutral-800 p-3 text-center transition-all peer-checked:border-cyan-500 peer-checked:bg-cyan-50 dark:peer-checked:bg-cyan-900/30 peer-checked:text-cyan-700 dark:peer-checked:text-cyan-300 hover:bg-neutral-50 dark:hover:bg-neutral-800">
+                        <mat-icon class="mb-1">credit_card</mat-icon>
+                        <div class="text-xs font-bold">Tarjeta</div>
+                    </div>
+                </label>
+
+                <label class="cursor-pointer">
+                    <input type="radio" formControlName="metodoPago" value="YAPE" class="peer sr-only">
+                    <div
+                        class="rounded-xl border border-neutral-200 dark:border-neutral-800 p-3 text-center transition-all peer-checked:border-purple-500 peer-checked:bg-purple-50 dark:peer-checked:bg-purple-900/30 peer-checked:text-purple-700 dark:peer-checked:text-purple-300 hover:bg-neutral-50 dark:hover:bg-neutral-800">
+                        
+                        <img src="/img/yape-logo.webp" alt="Yape" 
+                             class="h-6 w-auto mx-auto mb-3 object-contain">
+                        
+                        <div class="text-xs font-bold">Yape</div>
+                    </div>
+                </label>
+
+                <label class="cursor-pointer">
+                    <input type="radio" formControlName="metodoPago" value="PLIN" class="peer sr-only">
+                    <div
+                        class="rounded-xl border border-neutral-200 dark:border-neutral-800 p-3 text-center transition-all peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-700 dark:peer-checked:text-blue-300 hover:bg-neutral-50 dark:hover:bg-neutral-800">
+                        
+                        <img src="/img/plin-logo.webp" alt="Plin" 
+                             class="h-6 w-auto mx-auto mb-3 object-contain rounded-md">
+                        
+                        <div class="text-xs font-bold">Plin</div>
+                    </div>
+                </label>
+            </div>
+
+            <div *ngIf="form.get('metodoPago')?.value === 'TARJETA'"
+                class="space-y-4 p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl border border-neutral-200 dark:border-neutral-800 animate-in fade-in slide-in-from-top-2">
+                <div>
+                    <label class="block text-xs font-bold text-neutral-500 mb-1">Número de Tarjeta</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-neutral-400 material-icons !text-lg">payment</span>
+                        <input type="text" formControlName="numeroTarjeta" placeholder="0000 0000 0000 0000"
+                            maxlength="16"
+                            class="w-full pl-10 pr-4 py-2 rounded-lg border bg-white dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors"
+                            [class.border-red-500]="form.get('numeroTarjeta')?.invalid && form.get('numeroTarjeta')?.touched"
+                            [class.border-neutral-300]="!form.get('numeroTarjeta')?.invalid">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-neutral-500 mb-1">Vencimiento</label>
+                        <input type="text" formControlName="fechaVencimiento" placeholder="MM/YY" maxlength="5"
+                            class="w-full px-4 py-2 rounded-lg border bg-white dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors"
+                            [class.border-red-500]="form.get('fechaVencimiento')?.invalid && form.get('fechaVencimiento')?.touched"
+                            [class.border-neutral-300]="!form.get('fechaVencimiento')?.invalid">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-neutral-500 mb-1">CVV</label>
+                        <input type="password" formControlName="cvv" placeholder="123" maxlength="4"
+                            class="w-full px-4 py-2 rounded-lg border bg-white dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors"
+                            [class.border-red-500]="form.get('cvv')?.invalid && form.get('cvv')?.touched"
+                            [class.border-neutral-300]="!form.get('cvv')?.invalid">
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="form.get('metodoPago')?.value === 'YAPE'"
+                class="text-center p-6 bg-purple-50 dark:bg-purple-900/10 rounded-xl border border-purple-100 dark:border-purple-800 animate-in fade-in">
+                <p class="text-sm font-bold text-purple-700 dark:text-purple-300 mb-4">Escanea el QR para pagar con Yape
+                </p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                    alt="QR Yape" class="w-48 h-48 mx-auto rounded-lg shadow-md bg-white p-2">
+            </div>
+
+            <div *ngIf="form.get('metodoPago')?.value === 'PLIN'"
+                class="text-center p-6 bg-blue-50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-800 animate-in fade-in">
+                <p class="text-sm font-bold text-blue-700 dark:text-blue-300 mb-4">Escanea el QR para pagar con Plin</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                    alt="QR Plin" class="w-48 h-48 mx-auto rounded-lg shadow-md bg-white p-2">
+            </div>
+
+            <div class="bg-neutral-100 dark:bg-neutral-800 p-4 mt-4 rounded-xl space-y-2">
+                <div class="flex justify-between text-sm">
+                    <span class="text-neutral-600 dark:text-neutral-400">Items ({{ itemsCarrito.length }})</span>
+                    <span class="font-medium">{{ totalPagar | currency:'S/ ':'symbol' }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-neutral-600 dark:text-neutral-400">Envío</span>
+                    <span class="font-medium text-green-500">Gratis</span>
+                </div>
+                <div class="pt-2 border-t border-neutral-200 dark:border-neutral-700 flex justify-between items-center">
+                    <span class="font-bold text-lg">Total</span>
+                    <span class="font-bold text-xl text-cyan-600 dark:text-cyan-400">{{ totalPagar |
+                        currency:'S/ ':'symbol' }}</span>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 flex justify-end gap-3">
+        <button (click)="onCancel()" [disabled]="procesandoPago"
+            class="px-5 py-2.5 rounded-xl text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition disabled:opacity-50">
+            Cancelar
+        </button>
+        <button (click)="onSubmit()" [disabled]="form.invalid || procesandoPago || direcciones.length === 0"
+            class="px-6 py-2.5 rounded-xl text-sm font-bold bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 shadow-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2">
+            <span *ngIf="procesandoPago"
+                class="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></span>
+            {{ procesandoPago ? 'Procesando...' : 'Confirmar Pedido' }}
+        </button>
+    </div>
+
+</div>

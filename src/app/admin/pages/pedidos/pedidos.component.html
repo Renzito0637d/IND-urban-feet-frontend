@@ -1,0 +1,356 @@
+<section class="text-neutral-800 dark:text-neutral-200 py-8">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-cyan-600 dark:text-cyan-300 mb-6">📦 Gestión de Pedidos</h2>
+
+        <div class="space-y-6">
+
+            <details *ngFor="let pedido of pedidos"
+                class="group rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-300/60 dark:ring-neutral-800 shadow-sm">
+
+                <summary
+                    class="list-none cursor-pointer px-5 py-4 flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <span class="text-sm text-neutral-500 dark:text-neutral-400">Pedido</span>
+                        <span class="font-semibold">#{{ pedido.id }}</span>
+                        <span class="hidden md:inline">•</span>
+                        <span class="text-sm">{{ pedido.fechaPedido | date:'shortDate' }}</span>
+                        <span class="hidden md:inline">•</span>
+                        <span class="font-semibold">
+                            {{ calcularTotal(pedido) | currency:'S/ ':'symbol' }}
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span
+                            class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ring-1 ring-neutral-300 dark:ring-neutral-700"
+                            [ngClass]="{
+                                'bg-yellow-100 text-yellow-700': pedido.estado === 'PENDIENTE',
+                                'bg-blue-100 text-blue-700': pedido.estado === 'ENVIADO',
+                                'bg-green-100 text-green-700': pedido.estado === 'ENTREGADO'
+                              }">
+                            {{ pedido.estado }}
+                        </span>
+                        <svg class="size-5 text-neutral-500 transition-transform group-open:rotate-180"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.21l3.71-3.98a.75.75 0 111.08 1.04l-4.24 4.54a.75.75 0 01-1.08 0L4.15 8.27a.75.75 0 011.08-1.06z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </summary>
+
+                <div
+                    class="transition-all duration-500 ease-in-out border-t border-neutral-200 dark:border-neutral-800">
+                    <div class="px-5 pb-5 pt-4 space-y-6">
+
+                        <ng-container *ngIf="editingId === pedido.id; else viewMode">
+
+                            <div
+                                class="flex flex-col md:flex-row gap-4 justify-between bg-yellow-50 dark:bg-yellow-900/10 p-4 rounded-xl border border-yellow-200 dark:border-yellow-800">
+
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold uppercase text-yellow-800 dark:text-yellow-500 mb-1">
+                                        Cambiar Estado
+                                    </label>
+                                    <select [(ngModel)]="editBuffer.estado"
+                                        class="rounded-lg border border-yellow-300 bg-white dark:bg-neutral-900 px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-yellow-400 outline-none">
+                                        <option value="PENDIENTE">PENDIENTE</option>
+                                        <option value="PREPARANDO">PREPARANDO</option>
+                                        <option value="ENVIADO">ENVIADO</option>
+                                        <option value="ENTREGADO">ENTREGADO</option>
+                                        <option value="CANCELADO" *ngIf="isAdmin">CANCELADO</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex items-end gap-2">
+                                    <button (click)="guardarEdicion()"
+                                        class="bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 shadow-sm">
+                                        Guardar Cambios
+                                    </button>
+                                    <button (click)="cancelarEdicion()"
+                                        class="bg-white text-neutral-700 border border-neutral-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-neutral-50">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div *ngIf="isAdmin; else listaLectura" class="mt-4 space-y-2">
+
+                                <div class="flex justify-between items-end mb-2">
+                                    <h6 class="font-bold text-sm text-neutral-500 uppercase">Productos del Pedido</h6>
+
+                                    <span
+                                        class="text-[10px] text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-100 font-medium">
+                                        ⚠ Cantidades bloqueadas (Pedido pagado)
+                                    </span>
+                                </div>
+
+                                <div *ngFor="let item of editBuffer.detalles"
+                                    class="flex justify-between items-center border border-neutral-200 dark:border-neutral-800 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium">{{ item.nombreProducto }}</span>
+                                        <span class="text-xs text-neutral-500">
+                                            {{ item.color }} • Talla: {{ item.talla }}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs text-neutral-400 font-bold uppercase">Cant:</span>
+                                        <span class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+                                            {{ item.cantidad }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <p class="text-xs text-neutral-400 mt-2 italic px-1">
+                                    * Si la cantidad es incorrecta, cancela el pedido para reembolsar.
+                                </p>
+                            </div>
+
+                            <ng-template #listaLectura>
+                                <div class="mt-4 opacity-50 pointer-events-none">
+                                    <ul class="divide-y divide-neutral-200 dark:divide-neutral-800">
+                                        <li *ngFor="let item of editBuffer.detalles"
+                                            class="px-4 py-3 flex justify-between text-sm">
+                                            <span>{{ item.nombreProducto }}</span>
+                                            <span class="font-bold">{{ item.cantidad }}x</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </ng-template>
+
+                        </ng-container>
+
+                        <ng-template #viewMode>
+
+                            <p class="text-sm text-neutral-500 !p-0 !m-0">Usuario:</p>
+                            <div class="flex flex-wrap md:flex-nowrap justify-between items-center !pt-0 !my-3 gap-3">
+
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                                    <p class="font-semibold text-neutral-900 dark:text-neutral-100 my-auto text-lg">
+                                        {{ pedido.nombreUsuario }} {{ pedido.apellidoUsuario }}
+                                    </p>
+                                    <p class="text-cyan-600 dark:text-cyan-400 my-auto text-sm font-medium">
+                                        {{ pedido.emailUsuario }}
+                                    </p>
+                                </div>
+
+                                <div class="flex items-center gap-2">
+
+                                    <div *ngIf="pedido.telefonoUsuario">
+                                        <a [href]="'tel:' + pedido.telefonoUsuario"
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800 hover:bg-green-100 transition-colors font-bold text-sm">
+                                            <mat-icon
+                                                class="!text-lg !w-5 !h-5 flex items-center justify-center leading-none">phone</mat-icon>
+                                            {{ pedido.telefonoUsuario }}
+                                        </a>
+                                    </div>
+
+                                    <div *ngIf="!pedido.telefonoUsuario"
+                                        class="text-xs text-neutral-400 italic flex items-center gap-1 mr-2">
+                                        <mat-icon
+                                            class="!text-sm !w-4 !h-4 flex items-center justify-center leading-none">phone_disabled</mat-icon>
+                                        <span class="hidden sm:inline">Sin telf.</span>
+                                    </div>
+
+                                    <button *ngIf="canEdit" (click)="activarEdicion(pedido)"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-cyan-50 text-cyan-700 border border-cyan-200 hover:bg-cyan-100 transition-colors font-bold text-sm cursor-pointer"
+                                        title="Editar pedido">
+                                        <mat-icon
+                                            class="!text-lg !w-5 !h-5 flex items-center justify-center leading-none">edit</mat-icon>
+                                        <span class="hidden sm:inline">Editar</span>
+                                    </button>
+
+                                    <button *ngIf="isAdmin" (click)="eliminarPedido(pedido.id)"
+                                        class="inline-flex items-center justify-center p-1.5 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                        title="Eliminar pedido">
+                                        <mat-icon
+                                            class="!text-xl !w-6 !h-6 flex items-center justify-center leading-none">delete</mat-icon>
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div
+                                    class="rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+                                    <ul class="divide-y divide-neutral-200 dark:divide-neutral-800">
+                                        <li *ngFor="let item of pedido.detalles"
+                                            class="px-4 py-3 flex justify-between items-center text-sm">
+                                            <span>{{ item.nombreProducto }} <span class="text-neutral-400">({{
+                                                    item.tall }})</span></span>
+                                            <span class="font-bold">{{ item.cantidad }}x</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div
+                                    class="rounded-2xl border border-neutral-200 dark:border-neutral-800 p-4 text-sm h-full flex flex-col justify-between">
+
+                                    <div>
+                                        <h6
+                                            class="font-bold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
+                                            <span class="material-icons text-base text-cyan-600">local_shipping</span>
+                                            Datos de Entrega
+                                        </h6>
+
+                                        <div *ngIf="pedido.direccionEnvio; else sinDireccion"
+                                            class="space-y-2 text-neutral-600 dark:text-neutral-400">
+
+                                            <div class="flex flex-col">
+                                                <span class="text-[10px] uppercase font-bold text-neutral-400">Calle /
+                                                    Av.</span>
+                                                <span
+                                                    class="text-neutral-900 dark:text-neutral-200 font-medium text-base">
+                                                    {{ pedido.direccionEnvio.calle }}
+                                                </span>
+                                            </div>
+
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <div class="flex flex-col">
+                                                    <span
+                                                        class="text-[10px] uppercase font-bold text-neutral-400">Distrito</span>
+                                                    <span class="text-neutral-800 dark:text-neutral-300">
+                                                        {{ pedido.direccionEnvio.distrito }}
+                                                    </span>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <span
+                                                        class="text-[10px] uppercase font-bold text-neutral-400">Provincia</span>
+                                                    <span class="text-neutral-800 dark:text-neutral-300">
+                                                        {{ pedido.direccionEnvio.provincia }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="pedido.direccionEnvio.referencia"
+                                                class="bg-yellow-50 dark:bg-yellow-900/10 p-2 rounded-lg border border-yellow-100 dark:border-yellow-900/30 mt-2">
+                                                <p
+                                                    class="text-[10px] uppercase font-bold text-yellow-600 dark:text-yellow-500 mb-0.5">
+                                                    Referencia:</p>
+                                                <p
+                                                    class="text-xs text-neutral-700 dark:text-neutral-300 italic leading-snug">
+                                                    "{{ pedido.direccionEnvio.referencia }}"
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                        <ng-template #sinDireccion>
+                                            <p class="text-neutral-400 italic flex items-center gap-1">
+                                                <span class="material-icons text-sm">error_outline</span> Dirección no
+                                                registrada
+                                            </p>
+                                        </ng-template>
+                                    </div>
+
+                                    <div *ngIf="pedido.direccionEnvio"
+                                        class="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800">
+                                        <a [href]="'https://www.google.com/maps/search/?api=1&query=' + pedido.direccionEnvio.calle + ', ' + pedido.direccionEnvio.distrito + ', ' + pedido.direccionEnvio.provincia"
+                                            target="_blank"
+                                            class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 font-bold transition-colors text-sm border border-blue-200 dark:border-blue-800">
+
+                                            <mat-icon
+                                                class="!text-xl !w-5 !h-5 flex items-center justify-center leading-none">map</mat-icon>
+
+                                            Ver en Google Maps
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="mt-8 pt-6 border-t border-dashed border-neutral-200 dark:border-neutral-800">
+
+                                <h6
+                                    class="font-bold text-neutral-900 dark:text-neutral-100 mb-6 flex items-center gap-2 text-sm uppercase tracking-wide">
+                                    <span class="material-icons text-base text-cyan-500">history_edu</span>
+                                    Historial de Seguimiento
+                                </h6>
+
+                                <div class="relative pl-2 md:pl-4">
+
+                                    <div
+                                        class="absolute left-[25px] md:left-[35px] top-2 bottom-4 w-px bg-gradient-to-b from-neutral-200 via-neutral-200 to-transparent dark:from-neutral-700 dark:via-neutral-800">
+                                    </div>
+
+                                    <div class="space-y-6">
+                                        <div *ngFor="let h of pedido.historial; let i = index"
+                                            class="relative flex gap-4 group">
+
+                                            <div class="relative z-10 shrink-0">
+                                                <div class="flex items-center justify-center size-8 md:size-10 rounded-full border-2 transition-all duration-300"
+                                                    [ngClass]="{
+                            'bg-white dark:bg-neutral-900 border-cyan-500 shadow-[0_0_0_4px_rgba(6,182,212,0.1)]': i === 0,
+                            'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700': i > 0
+                        }">
+
+                                                    <span class="material-icons text-[16px] md:text-[20px]" [ngClass]="{
+                                'text-cyan-600 dark:text-cyan-400': i === 0,
+                                'text-neutral-400': i > 0
+                            }">
+                                                        {{
+                                                        h.estado === 'ENTREGADO' ? 'check_circle' :
+                                                        h.estado === 'ENVIADO' ? 'local_shipping' :
+                                                        h.estado === 'CANCELADO' ? 'cancel' :
+                                                        h.estado === 'PENDIENTE' ? 'schedule' : 'history'
+                                                        }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex-1 pt-1 md:pt-2">
+                                                <div
+                                                    class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
+
+                                                    <div>
+                                                        <p class="font-bold text-sm md:text-base capitalize transition-colors"
+                                                            [ngClass]="{'text-neutral-900 dark:text-white': i === 0, 'text-neutral-500 dark:text-neutral-400': i > 0}">
+                                                            {{ h.estado | titlecase }}
+                                                        </p>
+                                                        <p
+                                                            class="text-xs text-neutral-400 dark:text-neutral-500 flex items-center gap-1 mt-0.5">
+                                                            <span class="material-icons text-[10px]">person</span>
+                                                            {{ h.usuario || 'Sistema' }}
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="text-left sm:text-right">
+                                                        <span
+                                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700">
+                                                            <span
+                                                                class="material-icons text-[10px]">calendar_today</span>
+                                                            {{ h.fecha | date:'dd MMM yyyy, h:mm a' }}
+                                                        </span>
+                                                    </div>
+
+                                                </div>
+
+                                                <p *ngIf="i === 0 && h.estado === 'ENTREGADO'"
+                                                    class="text-xs text-green-600 mt-2 font-medium animate-pulse">
+                                                    ¡El pedido ha sido completado exitosamente!
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                        <div *ngIf="!pedido.historial || pedido.historial.length === 0"
+                                            class="pl-14 text-sm text-neutral-400 italic">
+                                            No hay movimientos registrados aún.
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </ng-template>
+
+                    </div>
+                </div>
+            </details>
+
+        </div>
+    </div>
+</section>

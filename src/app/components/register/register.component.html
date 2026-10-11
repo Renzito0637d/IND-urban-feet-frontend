@@ -1,0 +1,113 @@
+<div mat-dialog-title class="!p-0">
+    <button (click)="onCancel()"
+        class="absolute top-4 right-4  text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+            viewBox="0 0 16 16">
+            <path
+                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+        </svg>
+    </button>
+</div>
+<mat-dialog-content class="max-w-96 md:w-96">
+    <div class="flex-1 flex flex-col justify-center">
+
+        <!-- Logo -->
+        <div class="mb-4 text-center">
+            <img src="/img/logo.webp" alt="Logo UrbanFeet" class="mx-auto w-36">
+        </div>
+
+        <h2 class="text-2xl font-bold mb-6 text-center text-cyan-400 dark:text-cyan-300">Crea tu cuenta</h2>
+
+        <!-- Formulario -->
+        <form class="space-y-4 " [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="grid gap-3">
+                <div>
+                    <label for="reg-nombre" class="block text-sm font-medium mb-1 text-black dark:text-white">
+                        Nombre
+                    </label>
+                    <input type="text" id="reg-nombre" formControlName="nombre" required
+                        class="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-300 outline-none" />
+                    <!-- Mensaje de error (ejemplo) -->
+                    <div *ngIf="nombreControl?.invalid && (nombreControl?.touched || nombreControl?.dirty)"
+                        class="text-red-500 text-xs mt-1">
+                        <span *ngIf="nombreControl?.hasError('required')">El nombre es requerido.</span>
+                    </div>
+                </div>
+                <div>
+                    <label for="reg-apellido" class="block text-sm font-medium mb-1 text-black dark:text-white">
+                        Apellido
+                    </label>
+                    <input type="text" id="reg-apellido" formControlName="apellido" required
+                        class="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-300 outline-none" />
+                    <div *ngIf="apellidoControl?.invalid && (apellidoControl?.touched || apellidoControl?.dirty)"
+                        class="text-red-500 text-xs mt-1">
+                        <span *ngIf="apellidoControl?.hasError('required')">El apellido es requerido.</span>
+                    </div>
+                </div>
+                <div>
+                    <label for="reg-email" class="block text-sm font-medium mb-1 text-black dark:text-white">
+                        Correo
+                    </label>
+                    <input type="email" id="reg-email" formControlName="email" required
+                        class="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-300 outline-none" />
+                    <div *ngIf="emailControl?.invalid && (emailControl?.touched || emailControl?.dirty)"
+                        class="text-red-500 text-xs mt-1">
+                        <span *ngIf="emailControl?.hasError('required')">El correo es requerido.</span>
+                        <span *ngIf="emailControl?.hasError('email')">Formato de correo no válido.</span>
+                    </div>
+                </div>
+                <div>
+                    <label for="reg-phone" class="block text-sm font-medium mb-1 text-black dark:text-white">
+                        Celular
+                    </label>
+                    <input type="tel" id="reg-phone" formControlName="phone" maxlength="9" required placeholder="Ej: 987654321"
+                        class="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-300 outline-none placeholder-neutral-400" />
+                    <div *ngIf="phoneControl?.invalid && (phoneControl?.touched || phoneControl?.dirty)"
+                        class="text-red-500 text-xs mt-1">
+                        <span *ngIf="phoneControl?.hasError('required')">El celular es requerido.</span>
+                        <span *ngIf="phoneControl?.hasError('pattern')">Debe tener 9 dígitos.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label for="reg-dni" class="block text-sm font-medium mb-1 text-black dark:text-white">
+                    DNI
+                </label>
+                <input type="text" id="reg-dni" maxlength="8" formControlName="documentNumber" required placeholder="Ej: 12345678"
+                    class="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-300 outline-none placeholder-neutral-400" />
+                <div *ngIf="documentNumberControl?.invalid && (documentNumberControl?.touched || documentNumberControl?.dirty)"
+                    class="text-red-500 text-xs mt-1">
+                    <span *ngIf="documentNumberControl?.hasError('required')">El DNI es requerido.</span>
+                    <span *ngIf="documentNumberControl?.hasError('pattern')">Debe tener 8 dígitos.</span>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1 text-black dark:text-white">Contraseña</label>
+                <input type="password" id="reg-password" formControlName="password" autocomplete="new-password" required
+                    class="w-full px-4 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-300 outline-none" />
+                <div *ngIf="passwordControl?.invalid && (passwordControl?.touched || passwordControl?.dirty)"
+                    class="text-red-500 text-xs mt-1">
+                    <span *ngIf="passwordControl?.hasError('required')">La contraseña es requerida.</span>
+                    <span *ngIf="passwordControl?.hasError('minlength')">Mínimo 6 caracteres.</span>
+                </div>
+            </div>
+
+            <input type="hidden" name="formulario" value="login">
+
+            <button type="submit" [disabled]="registerForm.invalid"
+                class="w-full py-3 mb-1 rounded-xl font-semibold text-white bg-cyan-400 dark:bg-cyan-300 dark:text-neutral-900 hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                Registrarse
+            </button>
+        </form>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <p class="mt-3 text-sm text-center md:text-left text-neutral-600 dark:text-neutral-400">
+        ¿Ya tienes una cuenta?
+        <a (click)="onCancel()" (click)="openDialog()"
+            class="text-cyan-600 dark:text-cyan-300 font-semibold hover:underline">¡Inicia sesión aquí!</a>
+    </p>
+</mat-dialog-actions>

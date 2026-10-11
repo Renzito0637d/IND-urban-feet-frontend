@@ -1,0 +1,29 @@
+/* que el container ocupe alto completo */
+.admin-shell {
+  height: 100vh;
+}
+
+/* ancho del sidenav */
+.admin-sidenav {
+  width: 260px;
+  border-right: 1px cyan solid;
+}
+
+/* header del sidenav */
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 16px 20px;
+  font-weight: 600;
+}
+
+.admin-toolbar .flex-1 {
+  flex: 1;
+}
+
+/* área de contenido */
+.admin-content {
+  padding: 16px;
+}
+

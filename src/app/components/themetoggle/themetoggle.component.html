@@ -1,0 +1,20 @@
+<button type="button" role="switch" [attr.aria-checked]="isDark" (click)="toggleTheme()"
+  class="relative inline-flex items-center select-none">
+
+  <span class="relative w-14 h-8 rounded-full transition-colors duration-300
+           bg-gray-300 dark:bg-gray-600">
+
+    <span class="pointer-events-none absolute inset-y-0 left-1 flex items-center">
+      <i class="bi bi-sun-fill text-amber-400 ms-1"></i>
+    </span>
+
+    <span class="pointer-events-none absolute inset-y-0 right-1 flex items-center">
+      <i class="bi bi-moon-stars-fill text-blue-950 me-1"></i>
+    </span>
+
+    <span class="absolute top-1 left-1 h-6 w-6 rounded-full bg-white shadow
+             transition-transform duration-300 will-change-transform"
+      [ngClass]="mode === 'dark' ? 'translate-x-6' : 'translate-x-0'"></span>
+  </span>
+
+</button>

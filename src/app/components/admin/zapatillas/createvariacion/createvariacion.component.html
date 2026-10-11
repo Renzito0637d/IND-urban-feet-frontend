@@ -1,0 +1,108 @@
+<div class="w-full sm:min-w-[450px] bg-white dark:bg-neutral-900 flex flex-col">
+
+    <div class="px-6 py-5 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-start">
+        <div>
+            <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">
+                {{ isEditMode ? 'Editar Variación' : 'Nueva Variación' }}
+            </h2>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                {{ isEditMode ? 'Modifica el stock o precios.' : 'Agrega una nueva combinación de talla y color.' }}
+            </p>
+        </div>
+        <button (click)="dialogRef.close()"
+            class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors p-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="p-6">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+
+            <div class="grid grid-cols-2 gap-5">
+
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Color</label>
+                    <div class="relative">
+                        <select formControlName="color"
+                            class="w-full appearance-none rounded-xl border bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-neutral-900 cursor-pointer"
+                            [ngClass]="{'border-red-500': isInvalid('color'), 'border-neutral-300 dark:border-neutral-700': !isInvalid('color')}">
+                            <option value="" disabled selected>Seleccionar</option>
+                            <option value="Negro">Negro</option>
+                            <option value="Blanco">Blanco</option>
+                            <option value="Rojo">Rojo</option>
+                            <option value="Azul">Azul</option>
+                            <option value="Verde">Verde</option>
+                            <option value="Amarillo">Amarillo</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                        <!-- Icono Flecha -->
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-neutral-500">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                        {{ isEditMode ? 'Talla' : 'Tallas' }}
+                    </label>
+
+                    <input type="text" formControlName="talla" [placeholder]="isEditMode ? 'Ej. 40' : 'Ej. 38, 39, 40'"
+                        class="w-full rounded-xl border bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-neutral-900"
+                        [ngClass]="{'border-red-500': isInvalid('talla'), 'border-neutral-300 dark:border-neutral-700': !isInvalid('talla')}">
+
+                    <p *ngIf="!isEditMode" class="text-[10px] text-neutral-500 dark:text-neutral-400 mt-1">
+                        Separa con comas para crear múltiples (Ej: 38, 40, 42)
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-5">
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Precio
+                        (S/)</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-2.5 text-neutral-500 text-sm font-bold">S/</span>
+                        <input type="number" formControlName="precio" placeholder="0.00" step="0.01"
+                            class="w-full rounded-xl border bg-neutral-50 dark:bg-neutral-800 pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-neutral-900 font-mono"
+                            [ngClass]="{'border-red-500': isInvalid('precio'), 'border-neutral-300 dark:border-neutral-700': !isInvalid('precio')}">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Stock</label>
+                    <input type="number" formControlName="stock" placeholder="0"
+                        class="w-full rounded-xl border bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-neutral-900 font-mono"
+                        [ngClass]="{'border-red-500': isInvalid('stock'), 'border-neutral-300 dark:border-neutral-700': !isInvalid('stock')}">
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">URL Imagen</label>
+                <input type="text" formControlName="imageUrl" placeholder="https://..."
+                    class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-neutral-900 placeholder:text-neutral-400">
+                <p class="text-[10px] text-neutral-500">Pega el enlace directo a la imagen del producto.</p>
+            </div>
+
+        </form>
+    </div>
+
+    <div
+        class="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/50 flex justify-end gap-3 rounded-b-xl">
+        <button (click)="dialogRef.close()"
+            class="px-5 py-2.5 rounded-xl text-sm font-semibold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors">
+            Cancelar
+        </button>
+        <button (click)="onSubmit()" [disabled]="form.invalid || loading"
+            class="px-5 py-2.5 rounded-xl text-sm font-bold bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+            <span *ngIf="!loading">{{ isEditMode ? 'Guardar Cambios' : 'Agregar' }}</span>
+            <span *ngIf="loading" class="flex items-center gap-2">
+                Guardando...
+            </span>
+        </button>
+    </div>
+</div>

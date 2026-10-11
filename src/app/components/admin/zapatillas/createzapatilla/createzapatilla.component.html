@@ -1,0 +1,107 @@
+<div class="w-full sm:min-w-[500px] bg-white dark:bg-neutral-900 flex flex-col max-h-[90vh]">
+
+    <div class="px-6 py-5 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-start">
+        <div>
+            <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">
+                {{ isEditMode ? 'Editar Zapatilla' : 'Nueva Zapatilla' }}
+            </h2>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                {{ isEditMode ? 'Modifica los detalles generales del modelo.' : 'Registra el modelo base antes de añadir
+                tallas.' }}
+            </p>
+        </div>
+        <button (click)="dialogRef.close()"
+            class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors p-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="p-6 overflow-y-auto">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+            <div class="space-y-1.5">
+                <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Nombre del
+                    Modelo</label>
+                <input type="text" formControlName="nombre" placeholder="Ej. Air Force 1"
+                    class="w-full rounded-xl border bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-cyan-400 focus:bg-white dark:focus:bg-neutral-900"
+                    [ngClass]="{'border-red-500': isInvalid('nombre'), 'border-neutral-300 dark:border-neutral-700': !isInvalid('nombre')}">
+            </div>
+
+            <div class="grid grid-cols-2 gap-5">
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Marca</label>
+                    <div class="relative">
+                        <select formControlName="marca"
+                            class="w-full appearance-none rounded-xl border bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-cyan-400 border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 cursor-pointer">
+
+                            <option value="" disabled selected>Selecciona una marca</option>
+                            <option value="NIKE">NIKE</option>
+                            <option value="Adidas">Adidas</option>
+                            <option value="Atletix">Atletix</option>
+                            <option value="New Athletic">New Athletic</option>
+                            <option value="I-run">I-run</option>
+                            <option value="Punto">Punto</option>
+                        </select>
+
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-neutral-500">
+                            <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Tipo</label>
+                    <div class="relative">
+                        <select formControlName="tipo"
+                            class="w-full appearance-none rounded-xl border bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-cyan-400 border-neutral-300 dark:border-neutral-700">
+                            <option value="Deportiva">Deportiva</option>
+                            <option value="Casual">Casual</option>
+                            <option value="Formal">Formal</option>
+                            <option value="Outdoor">Outdoor</option>
+                            <option value="Fútbol">Fútbol</option>
+                            <option value="Running">Running</option>
+                            <option value="Training">Training</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Género</label>
+                <div class="relative">
+                    <select formControlName="genero"
+                        class="w-full appearance-none rounded-xl border bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-cyan-400 border-neutral-300 dark:border-neutral-700">
+                        <option value="Unisex">Unisex</option>
+                        <option value="Hombre">Hombre</option>
+                        <option value="Mujer">Mujer</option>
+                        <option value="Niños">Niños</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">Descripción</label>
+                <textarea formControlName="descripcion" rows="3"
+                    class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-cyan-400 resize-none"></textarea>
+            </div>
+        </form>
+    </div>
+
+    <div
+        class="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/50 flex justify-end gap-3 rounded-b-2xl">
+        <button (click)="dialogRef.close()"
+            class="px-5 py-2.5 rounded-xl text-sm font-semibold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors">
+            Cancelar
+        </button>
+        <button (click)="onSubmit()" [disabled]="form.invalid || loading"
+            class="px-5 py-2.5 rounded-xl text-sm font-bold bg-cyan-400 dark:bg-cyan-300 text-neutral-900 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+            <span *ngIf="!loading">{{ isEditMode ? 'Guardar Cambios' : 'Crear Modelo' }}</span>
+            <span *ngIf="loading" class="flex items-center gap-2">
+                Guardando...
+            </span>
+        </button>
+    </div>
+</div>

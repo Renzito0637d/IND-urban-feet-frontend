@@ -1,0 +1,288 @@
+<section class="bg-neutral-100 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-200 min-h-screen py-10">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+    <h1 class="text-3xl font-bold mb-8">Mis Pedidos</h1>
+
+    <div class="mb-8 flex items-center justify-between flex-wrap gap-4">
+      <div class="w-full sm:w-auto">
+        <label for="estado" class="block text-xs font-bold uppercase text-neutral-500 mb-2">Filtrar por estado</label>
+        <select id="estado" [(ngModel)]="filtroEstado" (change)="filtrar()"
+          class="w-full sm:w-64 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400">
+          <option value="">Todos los pedidos</option>
+          <option value="PENDIENTE">Pendiente / Recibido</option>
+          <option value="PREPARANDO">Preparando</option>
+          <option value="ENVIADO">Enviado</option>
+          <option value="ENTREGADO">Entregado</option>
+        </select>
+      </div>
+
+      <span class="text-sm text-neutral-500 font-medium">
+        {{ filteredPedidos.length }} pedidos encontrados
+      </span>
+    </div>
+
+    <div *ngIf="loading" class="space-y-4 animate-pulse">
+      <div class="h-24 bg-neutral-200 dark:bg-neutral-800 rounded-2xl"></div>
+      <div class="h-24 bg-neutral-200 dark:bg-neutral-800 rounded-2xl"></div>
+    </div>
+
+    <div *ngIf="!loading && filteredPedidos.length === 0"
+      class="text-center py-20 bg-white dark:bg-neutral-900 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-800">
+      <p class="text-neutral-500 text-lg">No tienes pedidos en este estado.</p>
+      <a routerLink="/catalogo" class="text-cyan-600 font-bold hover:underline mt-2 inline-block">Ir a comprar</a>
+    </div>
+
+    <div class="space-y-4">
+
+      <details *ngFor="let pedido of filteredPedidos"
+        class="group rounded-2xl bg-white dark:bg-neutral-900 ring-1 ring-neutral-200 dark:ring-neutral-800 open:ring-cyan-400/50 dark:open:ring-cyan-500/30 transition-all">
+
+        <summary
+          class="list-none cursor-pointer flex flex-wrap sm:flex-nowrap items-center justify-between gap-4 px-6 py-5 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 rounded-2xl transition-colors">
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="p-3 rounded-full" [ngClass]="{
+                    'bg-yellow-100 text-yellow-600': pedido.estado === 'PENDIENTE',
+                    'bg-blue-100 text-blue-600': pedido.estado === 'PREPARANDO' || pedido.estado === 'ENVIADO',
+                    'bg-green-100 text-green-600': pedido.estado === 'ENTREGADO'
+                 }">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path
+                  d="M3.375 4.5C2.339 4.5 1.5 5.339 1.5 6.375V13.5h12V6.375c0-1.036-.839-1.875-1.875-1.875H3.375zM13.5 15h-12v2.625c0 1.035.839 1.875 1.875 1.875h.375a3 3 0 116 0h3a.75.75 0 00.75-.75V15z" />
+                <path
+                  d="M8.25 19.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0zM15.75 6.75a.75.75 0 00-.75.75v11.25c0 .087.015.17.042.248a3 3 0 015.958.464c.853-.175 1.522-.935 1.464-1.883a18.659 18.659 0 00-3.732-10.104 1.837 1.837 0 00-1.47-.725H15.75z" />
+                <path d="M19.5 19.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
+              </svg>
+            </div>
+
+            <div class="flex flex-col">
+              <span class="text-xs font-bold text-neutral-500 uppercase tracking-wide">Pedido #{{ pedido.id }}</span>
+              <span class="font-bold text-lg">{{ pedido.estado }}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-8 w-full sm:w-auto justify-between sm:justify-end">
+            <div class="flex flex-col items-end">
+              <span class="text-xs text-neutral-500">Fecha</span>
+              <span class="font-medium">{{ pedido.fechaPedido | date:'dd MMM yyyy' }}</span>
+            </div>
+            <div class="flex flex-col items-end">
+              <span class="text-xs text-neutral-500">Total</span>
+              <span class="font-bold text-lg text-cyan-600 dark:text-cyan-400">
+                {{ calcularTotal(pedido) | currency:'S/ ':'symbol' }}
+              </span>
+            </div>
+            <svg class="size-5 text-neutral-400 group-open:rotate-180 transition-transform duration-300"
+              viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.207l3.71-3.977a.75.75 0 111.08 1.04l-4.24 4.54a.75.75 0 01-1.08 0l-4.24-4.54a.75.75 0 01.02-1.06z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+        </summary>
+
+        <div class="px-6 pb-6 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+
+          <div class="relative mt-6 mb-8 px-4">
+            <div class="absolute left-4 right-4 top-3.5 h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full"></div>
+            <div class="relative z-10 grid grid-cols-4 text-center">
+              <div class="flex flex-col items-center group/step">
+                <div class="size-8 rounded-full flex items-center justify-center border-4 transition-colors"
+                  [ngClass]="isStepActive(pedido.estado, 0) ? 'bg-cyan-500 border-cyan-100 dark:border-cyan-900 text-white' : 'bg-neutral-200 dark:bg-neutral-800 border-white dark:border-neutral-900 text-transparent'">
+                  <svg *ngIf="isStepActive(pedido.estado, 0)" class="size-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="3">
+                    <path d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p class="mt-2 text-xs font-bold" [class.text-cyan-600]="isStepActive(pedido.estado, 0)">Recibido</p>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="size-8 rounded-full flex items-center justify-center border-4 transition-colors"
+                  [ngClass]="isStepActive(pedido.estado, 1) ? 'bg-cyan-500 border-cyan-100 dark:border-cyan-900 text-white' : 'bg-neutral-200 dark:bg-neutral-800 border-white dark:border-neutral-900 text-transparent'">
+                  <svg *ngIf="isStepActive(pedido.estado, 1)" class="size-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="3">
+                    <path d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p class="mt-2 text-xs font-bold" [class.text-cyan-600]="isStepActive(pedido.estado, 1)">Preparando</p>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="size-8 rounded-full flex items-center justify-center border-4 transition-colors"
+                  [ngClass]="isStepActive(pedido.estado, 2) ? 'bg-cyan-500 border-cyan-100 dark:border-cyan-900 text-white' : 'bg-neutral-200 dark:bg-neutral-800 border-white dark:border-neutral-900 text-transparent'">
+                  <svg *ngIf="isStepActive(pedido.estado, 2)" class="size-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="3">
+                    <path d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p class="mt-2 text-xs font-bold" [class.text-cyan-600]="isStepActive(pedido.estado, 2)">Enviado</p>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="size-8 rounded-full flex items-center justify-center border-4 transition-colors"
+                  [ngClass]="isStepActive(pedido.estado, 3) ? 'bg-green-500 border-green-100 dark:border-green-900 text-white' : 'bg-neutral-200 dark:bg-neutral-800 border-white dark:border-neutral-900 text-transparent'">
+                  <svg *ngIf="isStepActive(pedido.estado, 3)" class="size-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="3">
+                    <path d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p class="mt-2 text-xs font-bold" [class.text-green-600]="isStepActive(pedido.estado, 3)">Entregado</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+
+            <div class="rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+              <div
+                class="px-4 py-3 bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-800">
+                <h6 class="text-xs font-bold uppercase tracking-wider text-neutral-500">Artículos ({{
+                  pedido.detalles.length }})</h6>
+              </div>
+              <ul class="divide-y divide-neutral-200 dark:divide-neutral-800 bg-white dark:bg-neutral-900">
+
+                <li *ngFor="let item of pedido.detalles"
+                  class="flex items-center justify-between gap-4 px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
+                  <div class="flex items-center gap-3">
+
+                    <div
+                      class="h-8 min-w-[2rem] px-2 rounded bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center font-bold text-xs">
+                      {{ item.cantidad }}x
+                    </div>
+
+                    <div class="text-sm">
+                      <div class="font-medium text-neutral-900 dark:text-neutral-100">
+                        {{ item.nombreProducto }}
+                        <span class="text-xs font-normal text-neutral-500">({{ item.marca }})</span>
+                      </div>
+
+                      <div class="text-xs text-neutral-500 mt-0.5 flex flex-wrap gap-x-2">
+                        <span>Color: {{ item.color }}</span>
+                        <span>•</span>
+                        <span>Talla: {{ item.tall }}</span>
+                        <span class="text-neutral-300 dark:text-neutral-700">|</span>
+                        <span class="font-medium text-neutral-700 dark:text-neutral-300">
+                          {{ item.precioTotal | currency:'S/ ':'symbol' }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden h-fit">
+              <div
+                class="px-4 py-3 bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-800">
+                <h6 class="text-xs font-bold uppercase tracking-wider text-neutral-500">Datos de Envío</h6>
+              </div>
+              <div class="p-4 bg-white dark:bg-neutral-900 text-sm space-y-3">
+
+                <div class="flex gap-3">
+                  <mat-icon class="text-neutral-400 !text-lg !w-5 !h-5">location_on</mat-icon>
+
+                  <div *ngIf="pedido.direccionEnvio; else noDireccion">
+                    <p class="font-bold">{{ pedido.direccionEnvio.calle }}</p>
+                    <p class="text-neutral-500">
+                      {{ pedido.direccionEnvio.distrito }}, {{ pedido.direccionEnvio.provincia }}
+                    </p>
+                    <p *ngIf="pedido.direccionEnvio.referencia" class="text-xs text-neutral-400 mt-1 italic">
+                      "{{ pedido.direccionEnvio.referencia }}"
+                    </p>
+                  </div>
+
+                  <ng-template #noDireccion>
+                    <p class="text-neutral-400 italic">Sin dirección registrada</p>
+                  </ng-template>
+                </div>
+
+                <div class="flex items-center gap-3 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+
+                  <div class="shrink-0 flex items-center justify-center">
+
+                    <mat-icon *ngIf="pedido.metodoPago === 'TARJETA'" class="text-neutral-400 !text-lg !w-5 !h-5">
+                      credit_card
+                    </mat-icon>
+
+                    <img *ngIf="pedido.metodoPago === 'YAPE'" src="/img/yape-logo.webp" alt="Yape"
+                      class="w-7 h-7 object-contain dark:brightness-200">
+
+                    <img *ngIf="pedido.metodoPago === 'PLIN'" src="/img/plin-logo.webp" alt="Plin"
+                      class="w-6 h-6 object-contain rounded-md">
+                  </div>
+
+                  <div>
+                    <p class="font-medium leading-none mb-1">Pago procesado</p>
+
+                    <p class="text-xs text-neutral-500 capitalize">
+                      {{ pedido.metodoPago === 'TARJETA' ? 'Tarjeta débito/crédito' : (pedido.metodoPago | titlecase) }}
+                    </p>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div *ngIf="pedido.historial && pedido.historial.length > 0"
+              class="mt-2 pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-800">
+
+              <h6 class="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-6 flex items-center gap-2">
+                <span class="material-icons text-base">history</span>
+                Historial de Movimientos
+              </h6>
+
+              <div class="relative pl-3 ml-1">
+                <div class="absolute left-[19px] top-2 bottom-4 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+
+                <div class="space-y-6">
+                  <div *ngFor="let h of pedido.historial; let i = index" class="relative group pl-6">
+
+                    <div class="absolute left-0 top-1.5 size-4 rounded-full border-2 transition-colors z-10" [ngClass]="{
+                        'bg-white dark:bg-neutral-900 border-cyan-500 ring-2 ring-cyan-100 dark:ring-cyan-900/40': i === 0,
+                        'bg-neutral-200 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-700': i > 0
+                    }">
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
+                      <div>
+                        <p class="font-bold text-sm capitalize"
+                          [ngClass]="{'text-neutral-900 dark:text-neutral-100': i === 0, 'text-neutral-500 dark:text-neutral-500': i > 0}">
+                          {{ h.estado | titlecase }}
+                        </p>
+                        <p class="text-xs text-neutral-400 mt-0.5">
+                          <span *ngIf="h.estado === 'PENDIENTE'">Tu pedido ha sido recibido.</span>
+                          <span *ngIf="h.estado === 'PREPARANDO'">Estamos empaquetando tus zapatillas.</span>
+                          <span *ngIf="h.estado === 'ENVIADO'">Tu pedido está en camino a tu dirección.</span>
+                          <span *ngIf="h.estado === 'ENTREGADO'">Pedido entregado con éxito.</span>
+                          <span *ngIf="h.estado === 'CANCELADO'">Pedido cancelado.</span>
+                        </p>
+                      </div>
+
+                      <span
+                        class="text-[10px] font-medium text-neutral-700 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-800/50 px-2 py-1 rounded border border-neutral-100 dark:border-neutral-800 w-fit">
+                        {{ h.fecha | date:'dd MMM, h:mm a' }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="pedido.estado === 'PENDIENTE' || pedido.estado === 'PREPARANDO'"
+              class="mt-2 pt-4 border-t border-neutral-100 dark:border-neutral-800">
+              <button (click)="cancelarPedido(pedido.id)"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-red-100 border hover:text-red-400 bg-red-500 border-red-200 hover:bg-red-50 dark:text-red-100 dark:border-red-900/50 dark:hover:bg-red-900/20 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                  <path fill-rule="evenodd"
+                    d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+                    clip-rule="evenodd" />
+                </svg>
+                Cancelar Pedido
+              </button>
+            </div>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
