@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/materia
 import { toast } from 'ngx-sonner';
 import { Observable } from 'rxjs';
 import { VariacionesService } from '../../../../services/variaciones.service';
+import { convertFileToWebP } from '../../../../utils/image-converter.util';
 
 @Component({
   selector: 'app-createvariacion',
@@ -22,6 +23,10 @@ export class CreatevariacionComponent implements OnInit {
 
   loading = false;
   isEditMode = false;
+  imagePreview: string | null = null;
+  imageFileName: string | null = null;
+  convertingImage = false;
+  isDragging = false;
 
   form: FormGroup = this.fb.group({
     color: ['', [Validators.required]],
@@ -36,12 +41,74 @@ export class CreatevariacionComponent implements OnInit {
     if (this.data && this.data.id) {
       this.isEditMode = true;
       this.form.patchValue(this.data);
+      if (this.data.imageUrl) {
+        this.imagePreview = this.data.imageUrl;
+      }
     }
   }
 
   isInvalid(fieldName: string): boolean {
     const field = this.form.get(fieldName);
     return !!(field && field.invalid && (field.dirty || field.touched));
+  }
+
+  async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      await this.processImageFile(input.files[0]);
+      // Reset input value so re-selecting same file triggers change
+      input.value = '';
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+  }
+
+  async onDrop(event: DragEvent): Promise<void> {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+
+    if (event.dataTransfer?.files && event.dataTransfer.files[0]) {
+      await this.processImageFile(event.dataTransfer.files[0]);
+    }
+  }
+
+  async processImageFile(file: File): Promise<void> {
+    if (!file.type.startsWith('image/')) {
+      toast.error('Por favor selecciona un archivo de imagen válido (PNG, JPG, WEBP).');
+      return;
+    }
+
+    try {
+      this.convertingImage = true;
+      this.imageFileName = file.name;
+      // Convertir imagen a formato .webp con calidad óptima
+      const webpBase64 = await convertFileToWebP(file, 800, 800, 0.85);
+      this.imagePreview = webpBase64;
+      this.form.patchValue({ imageUrl: webpBase64 });
+      toast.success('Imagen convertida a formato .webp correctamente');
+    } catch (error: any) {
+      console.error('Error al procesar la imagen:', error);
+      toast.error('No se pudo convertir la imagen: ' + (error?.message || 'Error desconocido'));
+    } finally {
+      this.convertingImage = false;
+    }
+  }
+
+  removeImage(): void {
+    this.imagePreview = null;
+    this.imageFileName = null;
+    this.form.patchValue({ imageUrl: '' });
   }
 
   onSubmit() {
