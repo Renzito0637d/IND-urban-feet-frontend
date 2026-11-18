@@ -29,9 +29,4 @@ export class VariacionesService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
-
-  // URL directa al endpoint de streaming de imagen binaria (WebP)
-  getImageBlobUrl(id: number): string {
-    return `${this.baseUrl}/${id}/imagen`;
-  }
 }
