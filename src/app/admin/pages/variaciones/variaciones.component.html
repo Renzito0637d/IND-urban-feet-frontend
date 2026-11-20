@@ -70,7 +70,9 @@
 
                     <div
                         class="h-40 bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center overflow-hidden relative">
-                        <img [src]="v.imageUrl || '/assets/images/sneaker-placeholder.png'"
+                        <img [src]="v.imageUrl || 'img/sinvar.jpg'"
+                            (error)="$any($event.target).src = 'img/sinvar.jpg'"
+                            [alt]="'Variación ' + v.color + ' talla ' + v.talla"
                             class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500">
 
                         <div class="absolute top-2 right-2 bg-black/80 text-white px-2 py-1 rounded text-xs font-bold">

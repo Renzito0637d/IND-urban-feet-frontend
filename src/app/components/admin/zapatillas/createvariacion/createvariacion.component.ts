@@ -22,21 +22,29 @@ export class CreatevariacionComponent implements OnInit {
 
   loading = false;
   isEditMode = false;
+  imagePreview: string | null = null;
 
   form: FormGroup = this.fb.group({
     color: ['', [Validators.required]],
-    talla: ['', [Validators.required]], // En creación aquí escriben "38, 40, 42"
+    talla: ['', [Validators.required]],
     precio: [0, [Validators.required, Validators.min(0)]],
     stock: [0, [Validators.required, Validators.min(0)]],
     imageUrl: ['']
   });
 
   ngOnInit(): void {
-    // Si tiene ID, es edición
     if (this.data && this.data.id) {
       this.isEditMode = true;
       this.form.patchValue(this.data);
+      if (this.data.imageUrl) {
+        this.imagePreview = this.data.imageUrl;
+      }
     }
+
+    this.form.get('imageUrl')?.valueChanges.subscribe((url: string) => {
+      const trimmed = (url || '').trim();
+      this.imagePreview = trimmed || null;
+    });
   }
 
   isInvalid(fieldName: string): boolean {
@@ -51,23 +59,22 @@ export class CreatevariacionComponent implements OnInit {
     }
 
     this.loading = true;
-    const rawValue = this.form.value; // Valores crudos del formulario
+    const rawValue = {
+      ...this.form.value,
+      imageUrl: (this.form.value.imageUrl || '').trim()
+    };
 
     let request$: Observable<any>;
 
     if (this.isEditMode) {
-      // --- MODO EDICIÓN ---
-      // Enviamos el objeto tal cual (talla es un string único)
       request$ = this.variacionService.update(this.data.id, rawValue);
     } else {
-      // --- MODO CREACIÓN MASIVA ---
       if (!this.data.zapatillaId) {
         toast.error('Error: No se identificó la zapatilla padre');
         this.loading = false;
         return;
       }
 
-      // 1. Convertimos el string "38, 40, 42" en Array ["38", "40", "42"]
       const tallasArray = rawValue.talla.toString()
         .split(',')
         .map((t: string) => t.trim())
@@ -79,13 +86,12 @@ export class CreatevariacionComponent implements OnInit {
         return;
       }
 
-      // 2. Construimos el payload que espera el Backend (VariacionRequest con lista 'tallas')
       const payload = {
         color: rawValue.color,
         precio: rawValue.precio,
         stock: rawValue.stock,
-        imageUrl: rawValue.imageUrl,
-        tallas: tallasArray // <--- Aquí enviamos el array
+        imageUrl: rawValue.imageUrl || null,
+        tallas: tallasArray
       };
 
       request$ = this.variacionService.create(this.data.zapatillaId, payload);
