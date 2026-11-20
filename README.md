@@ -13,13 +13,6 @@ Aplicación de página única (SPA) moderna, responsiva y de alto rendimiento pa
 | **Repositorio Frontend (GitHub)** | 🔗 [https://github.com/Renzito0637d/IND-urban-feet-frontend.git](https://github.com/Renzito0637d/IND-urban-feet-frontend.git) | `develop` |
 | **Repositorio Backend (GitHub)** | 🔗 [https://github.com/Renzito0637d/IND-urban-feet-backend.git](https://github.com/Renzito0637d/IND-urban-feet-backend.git) | `develop` |
 
-### 🔑 Credenciales Demo para Evaluación de Jurado
-
-* **Usuario Cliente (B2C):** `cliente@urbanfeet.com` / Contraseña: `Cliente123*`  
-  *(Exploración de catálogo, asistente virtual UrbanBot, carrito reactivo y compras simuladas).*
-* **Usuario Administrador:** `admin@urbanfeet.com` / Contraseña: `Admin123*`  
-  *(Acceso al panel administrativo, inventario, stock por variación y control de pedidos).*
-
 > [!NOTE]  
 > **Comportamiento FinOps (Render Free Tier):** Debido al plan gratuito en Render, si el backend no ha tenido actividad reciente, puede requerir de 30 a 45 segundos para reactivarse en la primera consulta.
 
@@ -36,24 +29,6 @@ Aplicación de página única (SPA) moderna, responsiva y de alto rendimiento pa
 | **Asistente Virtual B2C** | **UrbanBot (Google Gemini Flash API)** | Widget flotante de chat con respuestas puntuales de stock, guía de tallas y tarjetas que abren el modal del producto. |
 | **Plataforma Analítica Conectada** | **Databricks AI/BI & Genie Agent** | Ecosistema Lakehouse que procesa transacciones de la tienda para generar tableros analíticos y agente Text-to-SQL. |
 | **Despliegue Web** | **Nginx Alpine en Render** | Servidor web ultra ligero con consumo inferior a 15 MB de memoria RAM. |
-
----
-
-## 🧭 Flujo de Navegación e Interacción del Usuario
-
-```mermaid
-flowchart TD
-    Cliente([Cliente en la Web]) --> Home["Inicio / Carrusel de Novedades"]
-    
-    Home --> Catalogo["Catálogo con Filtros en BD<br>(Marca, Tipo, Talla, Precio)"]
-    Catalogo --> Modal["Modal de Producto (MatDialog)<br>Selección de Color y Talla"]
-    Modal --> Carrito["Carrito de Compras Inteligente<br>(Regla: Envío Gratis si > S/ 300)"]
-    Carrito --> Checkout["Pasarela de Pago Segura<br>(Transacción ACID en Backend)"]
-    
-    Cliente --> UrbanBot["UrbanBot (Chatbot IA con Gemini Flash)<br>Asesor de Estilo y Stock 24/7"]
-    UrbanBot -->|Respuesta Puntual| Tarjeta["Tarjeta Interactiva de Calzado"]
-    Tarjeta -->|Clic en 'Ver'| Modal
-```
 
 ---
 
