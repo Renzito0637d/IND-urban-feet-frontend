@@ -1,0 +1,4 @@
+/* Estilos específicos complementarios al diseño de Tailwind */
+:host {
+  display: block;
+}
