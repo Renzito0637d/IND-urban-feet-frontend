@@ -81,11 +81,29 @@
                 </div>
             </div>
 
-            <div class="space-y-1.5">
-                <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">URL Imagen</label>
-                <input type="text" formControlName="imageUrl" placeholder="https://..."
-                    class="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-neutral-900 placeholder:text-neutral-400">
-                <p class="text-[10px] text-neutral-500">Pega el enlace directo a la imagen del producto.</p>
+            <!-- URL de imagen (CDN / página oficial) -->
+            <div class="space-y-2">
+                <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                    URL de la imagen
+                </label>
+                <input type="url" formControlName="imageUrl"
+                    placeholder="https://static.nike.com/..."
+                    class="w-full rounded-xl border bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-neutral-900"
+                    [ngClass]="{'border-red-500': isInvalid('imageUrl'), 'border-neutral-300 dark:border-neutral-700': !isInvalid('imageUrl')}">
+                <p class="text-[10px] text-neutral-500 dark:text-neutral-400">
+                    Pega el enlace directo de la foto (CDN de la marca).
+                </p>
+
+                <div *ngIf="imagePreview"
+                    class="flex items-center gap-4 p-3 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
+                    <div class="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center">
+                        <img [src]="imagePreview" alt="Vista previa" class="w-full h-full object-contain p-1"
+                            (error)="imagePreview = null">
+                    </div>
+                    <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate flex-1 min-w-0">
+                        {{ imagePreview }}
+                    </p>
+                </div>
             </div>
 
         </form>
@@ -100,9 +118,7 @@
         <button (click)="onSubmit()" [disabled]="form.invalid || loading"
             class="px-5 py-2.5 rounded-xl text-sm font-bold bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
             <span *ngIf="!loading">{{ isEditMode ? 'Guardar Cambios' : 'Agregar' }}</span>
-            <span *ngIf="loading" class="flex items-center gap-2">
-                Guardando...
-            </span>
+            <span *ngIf="loading">Guardando...</span>
         </button>
     </div>
 </div>
